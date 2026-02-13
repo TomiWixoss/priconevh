@@ -1,0 +1,75 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: var(--background);
+}
+
+/* Title Bar */
+.title-bar {
+  height: 40px;
+  background: hsla(220, 20%, 10%, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--card-border);
+  flex-shrink: 0;
+}
+
+.title-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-bar-logo {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #facc15, #f97316);
+}
+
+.title-bar-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+.title-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.title-bar-button {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.title-bar-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.title-bar-button.close:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.main-content {
+  flex: 1;
+  overflow: hidden;
+}

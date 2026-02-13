@@ -1,20 +1,23 @@
 import { useState, useEffect } from "react";
-import { Download, Play, FolderOpen, CheckCircle, AlertCircle, ChevronDown, Calendar } from "lucide-react";
+import { Download, Play, FolderOpen, MoreVertical, Settings } from "lucide-react";
 import { useGamePath } from "../../hooks/useGamePath";
 import { useTranslation } from "../../hooks/useTranslation";
 import { formatBytes, formatDate } from "../../lib/api";
 import type { TranslationVersion } from "../../types";
+import "./MainScreen.css";
 
 interface MainScreenProps {
   gamePathHook: ReturnType<typeof useGamePath>;
   translationHook: ReturnType<typeof useTranslation>;
+  onOpenSettings: () => void;
 }
 
-export function MainScreen({ gamePathHook, translationHook }: MainScreenProps) {
+export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: MainScreenProps) {
   const { gamePath, gameInfo, isLoading: isGameLoading, autoDetectGame, selectGameDirectory } = gamePathHook;
   const { pack, currentInfo, isLoading: _isTranslationLoading, isInstalling, progress, loadPack, install, update, loadCurrentInfo } = translationHook;
 
   const [showVersions, setShowVersions] = useState(false);
+  const [showGameMenu, setShowGameMenu] = useState(false);
   const [selectedVersion, setSelectedVersion] = useState<TranslationVersion | null>(null);
 
   const hasGame = gamePath && gameInfo?.is_valid;
@@ -60,10 +63,10 @@ export function MainScreen({ gamePathHook, translationHook }: MainScreenProps) {
 
   const getMainButtonText = () => {
     if (isInstalling) return "ĐANG CÀI ĐẶT...";
-    if (!hasGame) return "CHỌN THƯ MỤC GAME";
-    if (hasTranslation && currentInfo?.version === selectedVersion?.version) return "CHƠI NGAY";
-    if (hasTranslation && currentInfo?.version !== selectedVersion?.version) return "CẬP NHẬT VIỆT HÓA";
-    return "CÀI ĐẶT VIỆT HÓA";
+    if (!hasGame) return "Chọn thư mục game";
+    if (hasTranslation && currentInfo?.version === selectedVersion?.version) return "Tải game";
+    if (hasTranslation && currentInfo?.version !== selectedVersion?.version) return "Cập nhật";
+    return "Cài đặt";
   };
 
   const getMainButtonIcon = () => {
@@ -90,100 +93,51 @@ export function MainScreen({ gamePathHook, translationHook }: MainScreenProps) {
       </div>
 
       {/* Content */}
-      <div className="main-screen-content">
-        {/* Top Section - Title & Info */}
-        <div className="main-screen-top">
-          <div className="main-screen-info">
-            {/* Title */}
-            <div style={{ marginBottom: 32 }}>
-              <div className="badge">
-                <span className="badge-text">OFFICIAL RELEASE</span>
+      <div className="main-screen-content-new">
+        {/* Top Left - Logo & Title */}
+        <div className="game-logo-section">
+          <div className="game-logo-card">
+            <div className="game-logo-image">
+              <div className="game-logo-placeholder">
+                <span style={{ fontSize: 32, fontWeight: 900 }}>PC</span>
               </div>
-              <h1 className="main-title">
-                PRINCESS<br/>CONNECT
-              </h1>
-              <p className="main-subtitle">Re:Dive</p>
-              <p className="main-description">Bản việt hóa chính thức</p>
             </div>
-
-            {/* Status Info */}
-            {hasGame && (
-              <div className="status-card">
-                <div className={`status-icon ${hasTranslation ? 'success' : 'warning'}`}>
-                  {hasTranslation ? (
-                    <CheckCircle style={{ width: 20, height: 20 }} />
-                  ) : (
-                    <AlertCircle style={{ width: 20, height: 20 }} />
-                  )}
-                </div>
-                <div className="status-info">
-                  <p className="status-label">Trạng thái</p>
-                  <p className="status-text">
-                    {hasTranslation 
-                      ? `Đã cài việt hóa ${currentInfo?.version || ''}` 
-                      : 'Chưa cài việt hóa'}
-                  </p>
-                </div>
-                <button
-                  onClick={selectGameDirectory}
-                  className="status-button"
-                >
-                  Đổi thư mục
-                </button>
+            <div className="game-info-text">
+              <h2 className="game-title">PRINCESS CONNECT</h2>
+              <p className="game-subtitle">Re:Dive</p>
+              <div className="game-release-badge">
+                <span>OFFICIAL RELEASE</span>
               </div>
-            )}
-
-            {/* Main Action Button */}
-            <button
-              onClick={handleMainAction}
-              disabled={isInstalling || isGameLoading || (hasGame && !selectedVersion) || false}
-              className="main-action-button"
-            >
-              {getMainButtonIcon()}
-              {getMainButtonText()}
-            </button>
-
-            {/* Progress Bar */}
-            {isInstalling && (
-              <div className="progress-card">
-                <div className="progress-info">
-                  <p className="progress-message">{progress.message}</p>
-                  <p className="progress-percent">{Math.round(progress.progress)}%</p>
-                </div>
-                <div className="progress-bar-container">
-                  <div 
-                    className="progress-bar"
-                    style={{ width: `${progress.progress}%` }}
-                  />
-                </div>
-              </div>
-            )}
+              <p className="game-release-date">2026.01.22</p>
+            </div>
           </div>
         </div>
 
-        {/* Bottom Section - Version Selector & News */}
-        <div className="main-screen-bottom">
-          {/* Version Selector */}
+        {/* Bottom Right - Action Buttons */}
+        <div className="action-buttons-section">
+          {/* Settings Button */}
+          <button
+            onClick={onOpenSettings}
+            className="settings-fab"
+            title="Cài đặt"
+          >
+            <Settings style={{ width: 24, height: 24 }} />
+          </button>
+
+          {/* Version Selector (if game is installed) */}
           {hasGame && pack && pack.versions.length > 0 && (
-            <div className="version-selector">
+            <div className="version-selector-compact">
               <button
                 onClick={() => setShowVersions(!showVersions)}
-                className="version-selector-button"
+                className="version-selector-compact-button"
               >
-                <div className="version-selector-left">
-                  <Download className="version-icon" />
-                  <div className="version-info">
-                    <p className="version-label">Phiên bản</p>
-                    <p className="version-value">
-                      {selectedVersion?.version || pack.latest_version}
-                    </p>
-                  </div>
-                </div>
-                <ChevronDown className={`version-chevron ${showVersions ? 'open' : ''}`} />
+                <span className="version-text">
+                  {selectedVersion?.version || pack.latest_version}
+                </span>
               </button>
 
               {showVersions && (
-                <div className="version-list">
+                <div className="version-dropdown">
                   {pack.versions.map((version: TranslationVersion) => {
                     const isSelected = selectedVersion?.version === version.version;
                     const isCurrent = currentInfo?.version === version.version;
@@ -195,15 +149,15 @@ export function MainScreen({ gamePathHook, translationHook }: MainScreenProps) {
                           setSelectedVersion(version);
                           setShowVersions(false);
                         }}
-                        className={`version-item ${isSelected ? 'selected' : ''}`}
+                        className={`version-dropdown-item ${isSelected ? 'selected' : ''}`}
                       >
-                        <div className="version-item-header">
-                          <span className="version-name">{version.version}</span>
+                        <div className="version-dropdown-header">
+                          <span className="version-dropdown-name">{version.version}</span>
                           {isCurrent && (
-                            <span className="version-badge">Đã cài</span>
+                            <span className="version-dropdown-badge">Đã cài</span>
                           )}
                         </div>
-                        <div className="version-meta">
+                        <div className="version-dropdown-meta">
                           <span>{formatDate(version.release_date)}</span>
                           <span>•</span>
                           <span>{formatBytes(version.file_size)}</span>
@@ -216,19 +170,65 @@ export function MainScreen({ gamePathHook, translationHook }: MainScreenProps) {
             </div>
           )}
 
-          {/* News/Info Card */}
-          <div className="info-card">
-            <div className="info-card-header">
-              <Calendar className="info-icon" />
-              <div>
-                <p className="info-card-label">Thông báo</p>
-                <p className="info-card-title">Chào mừng!</p>
+          {/* Main Action Button Group */}
+          <div className="main-action-group">
+            <button
+              onClick={handleMainAction}
+              disabled={isInstalling || isGameLoading || (hasGame && !selectedVersion) || false}
+              className="main-action-button-new"
+            >
+              {getMainButtonIcon()}
+              <span>{getMainButtonText()}</span>
+            </button>
+
+            {/* Game Menu Button (3 dots) */}
+            <div className="game-menu-container">
+              <button
+                onClick={() => setShowGameMenu(!showGameMenu)}
+                className="game-menu-button"
+                disabled={isInstalling}
+              >
+                <MoreVertical style={{ width: 24, height: 24 }} />
+              </button>
+
+              {showGameMenu && (
+                <div className="game-menu-dropdown">
+                  <button
+                    onClick={() => {
+                      selectGameDirectory();
+                      setShowGameMenu(false);
+                    }}
+                    className="game-menu-item"
+                  >
+                    <FolderOpen style={{ width: 18, height: 18 }} />
+                    <span>{hasGame ? 'Đổi thư mục game' : 'Chọn thư mục game'}</span>
+                  </button>
+                  {hasGame && (
+                    <div className="game-menu-info">
+                      <p className="game-menu-info-label">Đường dẫn hiện tại:</p>
+                      <p className="game-menu-info-path">{gamePath}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Progress Bar */}
+          {isInstalling && (
+            <div className="progress-card-new">
+              <div className="progress-info">
+                <p className="progress-message">{progress.message}</p>
+                <p className="progress-percent">{Math.round(progress.progress)}%</p>
+              </div>
+              <div className="progress-bar-container">
+                <div 
+                  className="progress-bar"
+                  style={{ width: `${progress.progress}%` }}
+                />
               </div>
             </div>
-            <p className="info-card-text">
-              Công cụ cài đặt bản việt hóa cho Princess Connect Re:Dive
-            </p>
-          </div>
+          )}
         </div>
       </div>
     </div>
