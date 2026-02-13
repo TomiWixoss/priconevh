@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Download, Play, FolderOpen, MoreVertical, Settings, X, Minus } from "lucide-react";
+import { Download, Play, FolderOpen, Settings, ChevronDown, Loader2, Star } from "lucide-react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useGamePath } from "../../hooks/useGamePath";
 import { useTranslation } from "../../hooks/useTranslation";
@@ -18,7 +18,6 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
   const { pack, currentInfo, isLoading: _isTranslationLoading, isInstalling, progress, loadPack, install, update, loadCurrentInfo } = translationHook;
 
   const [showVersions, setShowVersions] = useState(false);
-  const [showGameMenu, setShowGameMenu] = useState(false);
   const [selectedVersion, setSelectedVersion] = useState<TranslationVersion | null>(null);
 
   const hasGame = gamePath && gameInfo?.is_valid;
@@ -80,21 +79,33 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
   const getMainButtonText = () => {
     if (isInstalling) return "Đang cài đặt...";
     if (!hasGame) return "Chọn thư mục game";
-    if (hasTranslation && currentInfo?.version === selectedVersion?.version) return "Tải game";
+    if (hasTranslation && currentInfo?.version === selectedVersion?.version) return "Đã cài đặt";
     if (hasTranslation && currentInfo?.version !== selectedVersion?.version) return "Cập nhật";
     return "Cài đặt";
   };
 
   const getMainButtonIcon = () => {
-    if (isInstalling) return null;
-    if (!hasGame) return <FolderOpen />;
-    if (hasTranslation && currentInfo?.version === selectedVersion?.version) return <Play />;
-    return <Download />;
+    if (isInstalling) return <Loader2 size={20} className="btn-icon spinning" />;
+    if (!hasGame) return <FolderOpen size={20} />;
+    if (hasTranslation && currentInfo?.version === selectedVersion?.version) return <Play size={20} />;
+    return <Download size={20} />;
   };
 
   return (
     <div className="main-screen">
-      {/* Hero Section */}
+      {/* Background with gradient overlay */}
+      <div className="bg-layer">
+        <div className="bg-gradient bg-gradient-1" />
+        <div className="bg-gradient bg-gradient-2" />
+        <div className="bg-gradient bg-gradient-3" />
+        <div className="bg-particles">
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className={`particle particle-${i + 1}`} />
+          ))}
+        </div>
+      </div>
+
+      {/* Hero Image */}
       <div className="hero-section">
         <img 
           src="/hero.jpg" 
@@ -104,124 +115,153 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
             e.currentTarget.style.display = 'none';
           }}
         />
+        <div className="hero-overlay" />
       </div>
 
-      {/* Drag Bar */}
-      <div className="drag-bar" onMouseDown={handleDragStart} />
-
-      {/* Window Controls */}
-      <div className="window-controls">
-        <button onClick={onOpenSettings} className="control-btn">
-          <Settings />
-        </button>
-        <button onClick={handleMinimize} className="control-btn">
-          <Minus />
-        </button>
-        <button onClick={handleClose} className="control-btn control-close">
-          <X />
-        </button>
+      {/* Top Bar */}
+      <div className="top-bar">
+        <div className="drag-area" onMouseDown={handleDragStart} />
+        <div className="window-controls">
+          <button onClick={onOpenSettings} className="control-btn" title="Cài đặt">
+            <Settings size={16} />
+          </button>
+          <button onClick={handleMinimize} className="control-btn" title="Thu nhỏ">
+            <span className="minimize-icon">−</span>
+          </button>
+          <button onClick={handleClose} className="control-btn control-close" title="Đóng">
+            <span className="close-icon">×</span>
+          </button>
+        </div>
       </div>
 
-      {/* Bottom Panel */}
-      <div className="bottom-panel">
-        {/* Title Section */}
-        <div className={`title-section ${isInstalling ? 'compact' : ''}`}>
-          <h1 className="panel-title">Trình cài đặt việt hóa Priconne</h1>
-          <p className="panel-subtitle">Princess Connect! Re:Dive</p>
+      {/* Main Content */}
+      <div className="main-content">
+        {/* Title with decorative elements */}
+        <div className="title-area">
+          <div className="title-decoration">
+            <Star className="star-icon star-1" size={24} />
+            <Star className="star-icon star-2" size={16} />
+            <Star className="star-icon star-3" size={20} />
+          </div>
+          <h1 className="app-title">
+            <span className="title-highlight">Princess</span> Connect!
+          </h1>
+          <p className="app-subtitle">Trình cài đặt việt hóa</p>
         </div>
 
-        {/* Progress */}
-        {isInstalling && (
-          <div className="progress-container">
-            <div className="progress-info">
-              <span className="progress-message">{progress.message}</span>
-              <span className="progress-percent">{Math.round(progress.progress)}%</span>
+        {/* Glass Panel */}
+        <div className="glass-panel">
+          {/* Game Path Section */}
+          <div className="path-section">
+            <div className="path-header">
+              <FolderOpen size={18} />
+              <span>Thư mục game</span>
             </div>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: `${progress.progress}%` }} />
+            <div className="path-content">
+              <p className="path-value">
+                {hasGame ? gamePath : "Chưa chọn thư mục game"}
+              </p>
+              <button 
+                onClick={selectGameDirectory}
+                className="path-btn"
+                disabled={isInstalling}
+              >
+                {hasGame ? "Đổi" : "Chọn"}
+              </button>
             </div>
           </div>
-        )}
 
-        {/* Version Selector */}
-        {hasGame && pack && pack.versions.length > 0 && !isInstalling && (
-          <div className="version-selector">
-            <button
-              onClick={() => setShowVersions(!showVersions)}
-              className="version-button"
-            >
-              Phiên bản {selectedVersion?.version || pack.latest_version}
-            </button>
+          {/* Divider */}
+          <div className="panel-divider">
+            <div className="divider-line" />
+          </div>
 
-            {showVersions && (
-              <div className="version-dropdown">
-                {pack.versions.map((version: TranslationVersion) => {
-                  const isSelected = selectedVersion?.version === version.version;
-                  const isCurrent = currentInfo?.version === version.version;
-
-                  return (
-                    <button
-                      key={version.version}
-                      onClick={() => {
-                        setSelectedVersion(version);
-                        setShowVersions(false);
-                      }}
-                      className={`version-option ${isSelected ? 'selected' : ''}`}
-                    >
-                      <span className="version-name">{version.version}</span>
-                      {isCurrent && <span className="version-badge">Đã cài</span>}
-                      <span className="version-size">{formatBytes(version.file_size)}</span>
-                    </button>
-                  );
-                })}
+          {/* Version Selector */}
+          {hasGame && pack && pack.versions.length > 0 && (
+            <div className="version-section">
+              <div className="version-header">
+                <span className="version-label">Phiên bản dịch</span>
+                <span className="version-latest">
+                  Mới nhất: {pack.latest_version}
+                </span>
               </div>
-            )}
-          </div>
-        )}
+              <div className="version-dropdown-wrapper">
+                <button
+                  onClick={() => setShowVersions(!showVersions)}
+                  className="version-select"
+                >
+                  <div className="version-select-content">
+                    <span className="version-text">
+                      {selectedVersion?.version || pack.latest_version}
+                    </span>
+                    {selectedVersion && (
+                      <span className="version-size">
+                        {formatBytes(selectedVersion.file_size)}
+                      </span>
+                    )}
+                  </div>
+                  <ChevronDown size={18} className={`chevron ${showVersions ? 'open' : ''}`} />
+                </button>
 
-        {/* Action Buttons */}
-        <div className="action-buttons">
+                {showVersions && (
+                  <div className="version-dropdown glass-dropdown">
+                    {pack.versions.map((version: TranslationVersion) => {
+                      const isSelected = selectedVersion?.version === version.version;
+                      const isCurrent = currentInfo?.version === version.version;
+
+                      return (
+                        <button
+                          key={version.version}
+                          onClick={() => {
+                            setSelectedVersion(version);
+                            setShowVersions(false);
+                          }}
+                          className={`version-option ${isSelected ? 'selected' : ''}`}
+                        >
+                          <div className="version-info">
+                            <span className="version-name">{version.version}</span>
+                            {isCurrent && <span className="version-badge">Đã cài</span>}
+                          </div>
+                          <span className="version-size">{formatBytes(version.file_size)}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Progress */}
+          {isInstalling && (
+            <div className="progress-section">
+              <div className="progress-header">
+                <span className="progress-message">{progress.message}</span>
+                <span className="progress-percent">{Math.round(progress.progress)}%</span>
+              </div>
+              <div className="progress-bar">
+                <div className="progress-fill" style={{ width: `${progress.progress}%` }} />
+              </div>
+            </div>
+          )}
+
+          {/* Main Action Button */}
           <button
             onClick={handleMainAction}
-            disabled={isInstalling || isGameLoading || (hasGame && !selectedVersion) || false}
-            className="main-button"
+            disabled={!!(isInstalling || isGameLoading || (hasGame && !selectedVersion))}
+            className={`main-button ${!hasGame ? 'select-path' : ''}`}
           >
             {getMainButtonIcon()}
             <span>{getMainButtonText()}</span>
           </button>
-
-          <div className="menu-container">
-            <button
-              onClick={() => setShowGameMenu(!showGameMenu)}
-              className="menu-button"
-              disabled={isInstalling}
-            >
-              <MoreVertical />
-            </button>
-
-            {showGameMenu && (
-              <div className="game-menu">
-                <button
-                  onClick={() => {
-                    selectGameDirectory();
-                    setShowGameMenu(false);
-                  }}
-                  className="game-menu-item"
-                >
-                  <FolderOpen />
-                  <span>{hasGame ? 'Đổi thư mục' : 'Chọn thư mục'}</span>
-                </button>
-                {hasGame && (
-                  <div className="game-menu-path">
-                    <span className="path-label">Đường dẫn:</span>
-                    <p className="path-text">{gamePath}</p>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
         </div>
       </div>
+
+      {/* Decorative corner elements */}
+      <div className="corner-decoration corner-tl" />
+      <div className="corner-decoration corner-tr" />
+      <div className="corner-decoration corner-bl" />
+      <div className="corner-decoration corner-br" />
     </div>
   );
 }

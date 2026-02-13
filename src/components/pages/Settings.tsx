@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Bell, Power, Globe, Loader2, Save, X } from "lucide-react";
+import { Loader2, X, ChevronDown, Settings as SettingsIcon } from "lucide-react";
 import { configApi } from "../../lib/api";
 import type { AppConfig } from "../../types";
 import "./Settings.css";
@@ -51,15 +51,18 @@ export function SettingsDialog({ onClose }: SettingsDialogProps) {
 
   return (
     <div className="settings-overlay" onClick={onClose}>
-      <div className="settings-dialog" onClick={(e) => e.stopPropagation()}>
+      <div className="settings-dialog glass-panel" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="settings-header">
-          <div>
-            <h2 className="settings-title">Cài đặt</h2>
-            <p className="settings-subtitle">Cài đặt trình khởi chạy</p>
+          <div className="settings-title-area">
+            <SettingsIcon size={24} className="settings-icon" />
+            <div>
+              <h2 className="settings-title">Cài đặt</h2>
+              <p className="settings-subtitle">Tùy chỉnh trình khởi chạy</p>
+            </div>
           </div>
           <button onClick={onClose} className="settings-close">
-            <X />
+            <X size={20} />
           </button>
         </div>
 
@@ -67,22 +70,19 @@ export function SettingsDialog({ onClose }: SettingsDialogProps) {
         <div className="settings-content">
           {isLoading ? (
             <div className="settings-loading">
-              <Loader2 className="loading-spinner" />
-              <p>Đang tải cài đặt...</p>
+              <Loader2 className="loading-spinner" size={32} />
+              <p>Đang tải...</p>
             </div>
           ) : (
             <div className="settings-sections">
               {/* Section 1 */}
               <div className="settings-section">
-                <div className="section-header">
-                  <Bell className="section-icon" />
-                  <h3 className="section-title">Cài đặt trình khởi chạy</h3>
-                </div>
+                <h3 className="section-title">Cập nhật</h3>
                 <div className="section-content">
                   <div className="setting-item">
                     <div className="setting-info">
-                      <p className="setting-title">Tự động cập nhật việt hóa</p>
-                      <p className="setting-description">Khi có bản mới, tự động tải và cài đặt</p>
+                      <p className="setting-title">Tự động cập nhật</p>
+                      <p className="setting-description">Tự động tải bản dịch mới khi có</p>
                     </div>
                     <label className="toggle">
                       <input
@@ -97,7 +97,7 @@ export function SettingsDialog({ onClose }: SettingsDialogProps) {
                   <div className="setting-item">
                     <div className="setting-info">
                       <p className="setting-title">Kiểm tra khi khởi động</p>
-                      <p className="setting-description">Kiểm tra bản cập nhật mỗi khi mở ứng dụng</p>
+                      <p className="setting-description">Kiểm tra cập nhật mỗi khi mở app</p>
                     </div>
                     <label className="toggle">
                       <input
@@ -112,7 +112,7 @@ export function SettingsDialog({ onClose }: SettingsDialogProps) {
                   <div className="setting-item">
                     <div className="setting-info">
                       <p className="setting-title">Chạy khi khởi động</p>
-                      <p className="setting-description">Ứng dụng sẽ chạy ngầm khi Windows khởi động</p>
+                      <p className="setting-description">Tự động chạy cùng Windows</p>
                     </div>
                     <label className="toggle">
                       <input
@@ -126,60 +126,20 @@ export function SettingsDialog({ onClose }: SettingsDialogProps) {
                 </div>
               </div>
 
-              {/* Section 2 */}
-              <div className="settings-section">
-                <div className="section-header">
-                  <Globe className="section-icon" />
-                  <h3 className="section-title">Ngôn ngữ trình khởi chạy</h3>
-                </div>
-                <div className="section-content">
-                  <label className="input-label">Ngôn ngữ giao diện</label>
-                  <select
-                    value={config?.language || "vi"}
-                    onChange={(e) => setConfig(prev => prev ? { ...prev, language: e.target.value } : null)}
-                    className="select-input"
-                  >
-                    <option value="vi">Tiếng Việt</option>
-                    <option value="en">English</option>
-                    <option value="ja">日本語</option>
-                  </select>
-                </div>
-              </div>
-
               {/* Section 3 */}
               <div className="settings-section">
-                <div className="section-header">
-                  <Power className="section-icon" />
-                  <h3 className="section-title">Cài đặt khởi chạy</h3>
-                </div>
-                <div className="section-content">
-                  <label className="input-label">GitHub Repository</label>
-                  <input
-                    type="text"
-                    value={config?.github_repo || ""}
-                    onChange={(e) => setConfig(prev => prev ? { ...prev, github_repo: e.target.value } : null)}
-                    placeholder="username/repository"
-                    className="text-input"
-                  />
-                  <p className="input-hint">Ví dụ: tomisakae/priconevh-translation</p>
-                </div>
-              </div>
-
-              {/* Section 4 */}
-              <div className="settings-section">
-                <div className="section-header">
-                  <X className="section-icon" />
-                  <h3 className="section-title">Khi đóng cửa sổ</h3>
-                </div>
+                <h3 className="section-title">Hành vi</h3>
                 <div className="section-content">
                   <div className="radio-group">
                     <label className="radio-item">
                       <input type="radio" name="close-behavior" value="minimize" defaultChecked />
-                      <span className="radio-label">Thu nhỏ về khay hệ thống</span>
+                      <span className="radio-custom" />
+                      <span className="radio-label">Thu nhỏ về khay</span>
                     </label>
                     <label className="radio-item">
                       <input type="radio" name="close-behavior" value="close" />
-                      <span className="radio-label">Thoát trình khởi chạy</span>
+                      <span className="radio-custom" />
+                      <span className="radio-label">Thoát hoàn toàn</span>
                     </label>
                   </div>
                 </div>
@@ -197,20 +157,17 @@ export function SettingsDialog({ onClose }: SettingsDialogProps) {
               </div>
             )}
             <div className="settings-actions">
-              <button onClick={onClose} className="button-secondary" disabled={isSaving}>
+              <button onClick={onClose} className="btn-secondary" disabled={isSaving}>
                 Hủy
               </button>
-              <button onClick={handleSave} disabled={isSaving} className="button-primary">
+              <button onClick={handleSave} disabled={isSaving} className="btn-primary">
                 {isSaving ? (
                   <>
-                    <Loader2 />
+                    <Loader2 className="btn-icon" size={16} />
                     Đang lưu...
                   </>
                 ) : (
-                  <>
-                    <Save />
-                    Lưu
-                  </>
+                  "Lưu thay đổi"
                 )}
               </button>
             </div>
