@@ -104,10 +104,6 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
             e.currentTarget.style.display = 'none';
           }}
         />
-        <div className="hero-content">
-          <h1 className="hero-title">Trình cài đặt việt hóa Priconne</h1>
-          <p className="hero-subtitle">Princess Connect! Re:Dive</p>
-        </div>
       </div>
 
       {/* Drag Bar */}
@@ -128,8 +124,27 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
 
       {/* Bottom Panel */}
       <div className="bottom-panel">
+        {/* Title Section */}
+        <div className={`title-section ${isInstalling ? 'compact' : ''}`}>
+          <h1 className="panel-title">Trình cài đặt việt hóa Priconne</h1>
+          <p className="panel-subtitle">Princess Connect! Re:Dive</p>
+        </div>
+
+        {/* Progress */}
+        {isInstalling && (
+          <div className="progress-container">
+            <div className="progress-info">
+              <span className="progress-message">{progress.message}</span>
+              <span className="progress-percent">{Math.round(progress.progress)}%</span>
+            </div>
+            <div className="progress-bar">
+              <div className="progress-fill" style={{ width: `${progress.progress}%` }} />
+            </div>
+          </div>
+        )}
+
         {/* Version Selector */}
-        {hasGame && pack && pack.versions.length > 0 && (
+        {hasGame && pack && pack.versions.length > 0 && !isInstalling && (
           <div className="version-selector">
             <button
               onClick={() => setShowVersions(!showVersions)}
@@ -161,19 +176,6 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
                 })}
               </div>
             )}
-          </div>
-        )}
-
-        {/* Progress */}
-        {isInstalling && (
-          <div className="progress-container">
-            <div className="progress-info">
-              <span className="progress-message">{progress.message}</span>
-              <span className="progress-percent">{Math.round(progress.progress)}%</span>
-            </div>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: `${progress.progress}%` }} />
-            </div>
           </div>
         )}
 

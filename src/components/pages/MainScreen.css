@@ -26,42 +26,6 @@
   object-position: center;
 }
 
-.hero-content {
-  position: absolute;
-  top: 80px;
-  left: 48px;
-  z-index: 10;
-  max-width: 700px;
-}
-
-.hero-title {
-  font-size: 72px;
-  font-weight: 900;
-  color: #fff;
-  margin: 0 0 20px 0;
-  letter-spacing: 0.08em;
-  line-height: 1.2;
-  text-transform: uppercase;
-  text-shadow: 
-    3px 3px 0 #ff6b9d,
-    6px 6px 0 #9b7fd5,
-    9px 9px 0 #7dd3c0,
-    12px 12px 20px rgba(0, 0, 0, 0.3);
-}
-
-.hero-subtitle {
-  font-size: 28px;
-  font-weight: 700;
-  color: #fff;
-  margin: 0;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  text-shadow: 
-    2px 2px 0 #ff6b9d,
-    4px 4px 0 #9b7fd5,
-    6px 6px 15px rgba(0, 0, 0, 0.3);
-}
-
 /* Drag Bar */
 .drag-bar {
   position: fixed;
@@ -124,6 +88,45 @@
   flex-direction: column;
   gap: 28px;
   flex-shrink: 0;
+}
+
+/* Title Section */
+.title-section {
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.title-section.compact {
+  text-align: center;
+}
+
+.panel-title {
+  font-size: 42px;
+  font-weight: 900;
+  color: #000;
+  margin: 0 0 12px 0;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.title-section.compact .panel-title {
+  font-size: 24px;
+  margin: 0 0 6px 0;
+}
+
+.panel-subtitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #9b7fd5;
+  margin: 0;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.title-section.compact .panel-subtitle {
+  font-size: 14px;
+  letter-spacing: 0.03em;
 }
 
 /* Version Selector */
