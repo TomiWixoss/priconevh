@@ -1,8 +1,9 @@
+/* Settings Dialog - AWWWARDS Style */
+
 .dialog-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,61 +13,60 @@
 
 .dialog-container {
   width: 90%;
-  max-width: 600px;
+  max-width: 640px;
   max-height: 85vh;
-  background: rgba(30, 30, 30, 0.98);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   animation: slideUp 0.3s ease-out;
 }
 
 .dialog-header {
-  padding: 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 }
 
 .dialog-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: white;
+  font-size: 32px;
+  font-weight: 900;
+  color: #fff;
   margin: 0 0 4px 0;
+  letter-spacing: -0.02em;
 }
 
 .dialog-subtitle {
   font-size: 14px;
-  color: #9ca3af;
+  color: rgba(255, 255, 255, 0.5);
   margin: 0;
 }
 
 .dialog-close-button {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .dialog-close-button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #fff;
+  color: #000;
+  border-color: #fff;
 }
 
 .dialog-content {
   flex: 1;
   overflow-y: auto;
-  padding: 24px;
+  padding: 32px;
 }
 
 .dialog-loading {
@@ -74,86 +74,48 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  color: white;
+  padding: 64px;
+  color: #fff;
 }
 
 .dialog-sections {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 32px;
 }
 
 .dialog-section {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 32px;
+}
+
+.dialog-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .dialog-section-header {
-  padding: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.dialog-section-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dialog-section-icon.yellow {
-  background: rgba(250, 204, 21, 0.2);
-  color: #facc15;
-}
-
-.dialog-section-icon.blue {
-  background: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
-}
-
-.dialog-section-icon.purple {
-  background: rgba(168, 85, 247, 0.2);
-  color: #c084fc;
-}
-
-.dialog-section-icon.green {
-  background: rgba(34, 197, 94, 0.2);
-  color: #4ade80;
+  margin-bottom: 24px;
 }
 
 .dialog-section-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: white;
-  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 4px 0;
 }
 
 .dialog-section-content {
-  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .dialog-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  transition: background 0.2s;
-}
-
-.dialog-item:hover {
-  background: rgba(255, 255, 255, 0.06);
+  padding: 16px 0;
 }
 
 .dialog-item-info {
@@ -161,15 +123,15 @@
 }
 
 .dialog-item-title {
-  color: white;
-  font-weight: 500;
+  color: #fff;
+  font-weight: 600;
   font-size: 14px;
   margin: 0 0 4px 0;
 }
 
 .dialog-item-description {
   font-size: 13px;
-  color: #9ca3af;
+  color: rgba(255, 255, 255, 0.5);
   margin: 0;
 }
 
@@ -188,12 +150,12 @@
 }
 
 .toggle-slider {
-  width: 44px;
+  width: 48px;
   height: 24px;
-  background: #374151;
-  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   position: relative;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
 
 .toggle-slider::after {
@@ -201,102 +163,104 @@
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 20px;
-  height: 20px;
-  background: white;
-  border-radius: 50%;
-  transition: transform 0.2s;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  transition: transform 0.2s ease;
 }
 
 .toggle-switch input:checked + .toggle-slider {
-  background: #facc15;
+  background: #d4ff00;
+  border-color: #d4ff00;
 }
 
 .toggle-switch input:checked + .toggle-slider::after {
-  transform: translateX(20px);
+  background: #000;
+  transform: translateX(24px);
 }
 
 /* Form Elements */
 .dialog-label {
   display: block;
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #d1d5db;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
 }
 
 .dialog-input {
   width: 100%;
-  padding: 10px 14px;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
   font-size: 14px;
-  transition: border-color 0.2s;
+  transition: all 0.2s ease;
 }
 
 .dialog-input::placeholder {
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .dialog-input:focus {
   outline: none;
-  border-color: rgba(250, 204, 21, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .dialog-hint {
-  margin-top: 6px;
+  margin-top: 8px;
   font-size: 12px;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .dialog-select {
   width: 100%;
-  padding: 10px 14px;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
   font-size: 14px;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: all 0.2s ease;
 }
 
 .dialog-select:focus {
   outline: none;
-  border-color: rgba(250, 204, 21, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .dialog-radio-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .dialog-radio-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 16px;
   background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
 
 .dialog-radio-item:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .dialog-radio-item input[type="radio"] {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
 }
 
 .dialog-radio-title {
-  color: white;
+  color: #fff;
   font-size: 14px;
   font-weight: 500;
   margin: 0;
@@ -304,29 +268,29 @@
 
 /* Footer */
 .dialog-footer {
-  padding: 20px 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .dialog-message {
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 13px;
+  padding: 16px;
+  font-size: 14px;
+  border: 1px solid;
 }
 
 .dialog-message.success {
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid rgba(34, 197, 94, 0.3);
-  color: #4ade80;
+  background: rgba(212, 255, 0, 0.1);
+  border-color: #d4ff00;
+  color: #d4ff00;
 }
 
 .dialog-message.error {
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #f87171;
+  background: rgba(255, 0, 0, 0.1);
+  border-color: #ff0000;
+  color: #ff0000;
 }
 
 .dialog-actions {
@@ -336,47 +300,49 @@
 }
 
 .dialog-button-secondary {
-  padding: 10px 24px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  padding: 14px 32px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .dialog-button-secondary:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .dialog-button-secondary:disabled {
-  opacity: 0.5;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
 .dialog-button-primary {
-  padding: 10px 24px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #facc15, #f97316);
+  padding: 14px 32px;
+  background: #d4ff00;
   border: none;
-  color: #1a1a1a;
+  color: #000;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
 .dialog-button-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #fbbf24, #ea580c);
-  transform: translateY(-1px);
+  background: #fff;
 }
 
 .dialog-button-primary:disabled {
-  opacity: 0.5;
+  opacity: 0.3;
   cursor: not-allowed;
+}
+
+.dialog-section-icon {
+  display: none;
 }

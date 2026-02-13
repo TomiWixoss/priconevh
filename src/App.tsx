@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { listen } from "@tauri-apps/api/event";
-import { getCurrentWindow } from "@tauri-apps/api/window";
-import { X, Minus } from "lucide-react";
 import { MainScreen } from "./components/pages/MainScreen";
 import { SettingsDialog } from "./components/pages/Settings";
 import { useGamePath } from "./hooks/useGamePath";
@@ -30,50 +28,14 @@ function App() {
     };
   }, []);
 
-  const handleMinimize = async () => {
-    const window = getCurrentWindow();
-    await window.minimize();
-  };
-
-  const handleClose = async () => {
-    const window = getCurrentWindow();
-    await window.close();
-  };
-
   return (
     <div className="app-container">
-      {/* Custom Title Bar - Minimal */}
-      <div data-tauri-drag-region className="title-bar">
-        <div className="title-bar-left">
-          <div className="title-bar-logo" />
-          <span className="title-bar-title">Priconne VN</span>
-        </div>
-        <div className="title-bar-right">
-          <button 
-            onClick={handleMinimize}
-            className="title-bar-button"
-          >
-            <Minus style={{ width: 16, height: 16 }} />
-          </button>
-          <button 
-            onClick={handleClose}
-            className="title-bar-button close"
-          >
-            <X style={{ width: 16, height: 16 }} />
-          </button>
-        </div>
-      </div>
+      <MainScreen
+        gamePathHook={gamePathHook}
+        translationHook={translationHook}
+        onOpenSettings={() => setShowSettings(true)}
+      />
 
-      {/* Main Content */}
-      <div className="main-content">
-        <MainScreen
-          gamePathHook={gamePathHook}
-          translationHook={translationHook}
-          onOpenSettings={() => setShowSettings(true)}
-        />
-      </div>
-
-      {/* Settings Dialog */}
       {showSettings && (
         <SettingsDialog onClose={() => setShowSettings(false)} />
       )}
