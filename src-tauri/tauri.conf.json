@@ -12,9 +12,11 @@
   "app": {
     "windows": [
       {
-        "title": "priconevh",
-        "width": 800,
-        "height": 600
+        "title": "Priconne VN Installer",
+        "width": 900,
+        "height": 650,
+        "resizable": true,
+        "fullscreen": false
       }
     ],
     "security": {
@@ -31,5 +33,18 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "updater": {
+      "active": true,
+      "endpoints": [
+        "https://github.com/YOUR_USERNAME/priconevh/releases/latest/download/latest.json"
+      ],
+      "dialog": true,
+      "pubkey": "YOUR_PUBLIC_KEY_HERE"
+    },
+    "autostart": {
+      "enabled": false
+    }
   }
 }
