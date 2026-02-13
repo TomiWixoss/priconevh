@@ -4,7 +4,7 @@ mod commands;
 
 use commands::*;
 use models::AppConfig;
-use services::TranslationService;
+use services::{TranslationService, UpdaterService};
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
@@ -22,8 +22,19 @@ pub fn run() {
                 service: Arc::new(Mutex::new(translation_service)),
             };
             
+            // Initialize UpdaterService
+            let app_version = app.package_info().version.to_string();
+            let updater_service = UpdaterService::new(
+                config.github_repo.clone(),
+                app_version,
+            );
+            let updater_state = UpdaterState {
+                service: Arc::new(Mutex::new(updater_service)),
+            };
+            
             use tauri::Manager;
             app.manage(translation_state);
+            app.manage(updater_state);
             
             // Setup autostart if enabled
             if config.auto_start {
@@ -45,7 +56,6 @@ pub fn run() {
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_autostart::init(
             tauri_plugin_autostart::MacosLauncher::LaunchAgent,
             None,

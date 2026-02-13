@@ -42,8 +42,10 @@ export interface AppConfig {
 export interface AppUpdateInfo {
   version: string;
   current_version: string;
-  date: string | null;
-  body: string | null;
+  release_date: string;
+  download_url: string;
+  file_size: number;
+  changelog: string[];
 }
 
 // Progress Event Types

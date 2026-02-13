@@ -90,16 +90,15 @@ export const systemApi = {
 export const updaterApi = {
   checkUpdate: () => invoke<AppUpdateInfo | null>("check_app_update"),
   
-  downloadAndInstall: () => invoke<void>("download_and_install_update"),
+  downloadAndInstall: (updateInfo: AppUpdateInfo) => 
+    invoke<void>("download_and_install_update", { updateInfo }),
   
-  onProgress: (callback: (progress: number) => void) =>
-    listen<number>("updater-progress", (event) => {
-      callback(event.payload);
-    }),
-  
-  onCompleted: (callback: () => void) =>
-    listen("updater-completed", () => {
-      callback();
+  onProgress: (callback: (event: ProgressEvent) => void) =>
+    listen<[string, number]>("updater-progress", (event) => {
+      callback({
+        message: event.payload[0],
+        progress: event.payload[1],
+      });
     }),
 };
 
