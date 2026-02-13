@@ -1,4 +1,4 @@
-use crate::models::{GameInfo, TranslationPack, TranslationVersion};
+use crate::models::{TranslationPack, TranslationVersion};
 use crate::services::TranslationService;
 use std::sync::Arc;
 use tauri::{AppHandle, Emitter};

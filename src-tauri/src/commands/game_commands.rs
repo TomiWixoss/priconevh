@@ -1,7 +1,7 @@
 use crate::models::GameInfo;
 use crate::services::GameService;
 use std::path::PathBuf;
-use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
+use tauri_plugin_dialog::MessageDialogKind;
 
 #[tauri::command]
 pub async fn auto_detect_game() -> Result<Option<String>, String> {
@@ -21,7 +21,7 @@ pub async fn select_game_directory(app: tauri::AppHandle) -> Result<Option<Strin
         .blocking_pick_folder();
 
     if let Some(path) = folder {
-        let path_str = path.to_string_lossy().to_string();
+        let path_str = path.to_string();
         
         // Validate game path
         match GameService::validate_game_path(PathBuf::from(&path_str)) {

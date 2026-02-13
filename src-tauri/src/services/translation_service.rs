@@ -1,6 +1,6 @@
 use crate::models::{GameInfo, TranslationVersion};
 use crate::services::{DownloadService, FileService, GitHubService};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -11,7 +11,7 @@ pub struct TranslationInfo {
 }
 
 pub struct TranslationService {
-    github_service: GitHubService,
+    pub github_service: GitHubService,
     download_service: DownloadService,
 }
 
@@ -28,12 +28,19 @@ impl TranslationService {
         &self,
         game_info: &GameInfo,
         version: &TranslationVersion,
-        mut progress_callback: F,
+        progress_callback: F,
     ) -> Result<(), String>
     where
         F: FnMut(&str, f32) + Send + 'static,
     {
-        progress_callback("Đang chuẩn bị...", 0.0);
+        use std::sync::{Arc, Mutex};
+        
+        let progress = Arc::new(Mutex::new(progress_callback));
+        
+        {
+            let progress = progress.clone();
+            progress.lock().unwrap()("Đang chuẩn bị...", 0.0);
+        }
 
         // Tạo thư mục temp
         let temp_dir = std::env::temp_dir().join("priconevh_temp");
@@ -41,50 +48,78 @@ impl TranslationService {
             .map_err(|e| format!("Failed to create temp directory: {}", e))?;
 
         // Download file
-        progress_callback("Đang tải xuống bản việt hóa...", 10.0);
+        {
+            let progress = progress.clone();
+            progress.lock().unwrap()("Đang tải xuống bản việt hóa...", 10.0);
+        }
+        
         let zip_path = temp_dir.join(format!("translation_{}.zip", version.version));
         
-        self.download_service
-            .download_file(
-                &version.download_url,
-                zip_path.clone(),
-                |downloaded, total| {
-                    if total > 0 {
-                        let percent = 10.0 + (downloaded as f32 / total as f32) * 40.0;
-                        progress_callback("Đang tải xuống...", percent);
-                    }
-                },
-            )
-            .await?;
+        {
+            let progress = progress.clone();
+            self.download_service
+                .download_file(
+                    &version.download_url,
+                    zip_path.clone(),
+                    move |downloaded, total| {
+                        if total > 0 {
+                            let percent = 10.0 + (downloaded as f32 / total as f32) * 40.0;
+                            progress.lock().unwrap()("Đang tải xuống...", percent);
+                        }
+                    },
+                )
+                .await?;
+        }
 
         // Giải nén
-        progress_callback("Đang giải nén...", 50.0);
+        {
+            let progress = progress.clone();
+            progress.lock().unwrap()("Đang giải nén...", 50.0);
+        }
         let extract_dir = temp_dir.join("extracted");
         FileService::extract_zip(&zip_path, &extract_dir)?;
 
         // Backup files cũ nếu có
-        progress_callback("Đang sao lưu dữ liệu cũ...", 60.0);
+        {
+            let progress = progress.clone();
+            progress.lock().unwrap()("Đang sao lưu dữ liệu cũ...", 60.0);
+        }
         if game_info.has_translation {
             self.backup_old_translation(&game_info.path)?;
         }
 
         // Xóa files cũ
-        progress_callback("Đang xóa dữ liệu cũ...", 70.0);
+        {
+            let progress = progress.clone();
+            progress.lock().unwrap()("Đang xóa dữ liệu cũ...", 70.0);
+        }
         self.remove_old_translation(&game_info.path)?;
 
         // Copy files mới
-        progress_callback("Đang cài đặt bản việt hóa...", 80.0);
+        {
+            let progress = progress.clone();
+            progress.lock().unwrap()("Đang cài đặt bản việt hóa...", 80.0);
+        }
         self.copy_translation_files(&extract_dir, &game_info.path)?;
 
         // Tạo file thông tin
-        progress_callback("Đang hoàn tất...", 90.0);
+        {
+            let progress = progress.clone();
+            progress.lock().unwrap()("Đang hoàn tất...", 90.0);
+        }
         self.create_translation_info(&game_info.path, &version.version)?;
 
         // Dọn dẹp
-        progress_callback("Đang dọn dẹp...", 95.0);
+        {
+            let progress = progress.clone();
+            progress.lock().unwrap()("Đang dọn dẹp...", 95.0);
+        }
         FileService::remove_path(&temp_dir)?;
 
-        progress_callback("Hoàn thành!", 100.0);
+        {
+            let progress = progress.clone();
+            progress.lock().unwrap()("Hoàn thành!", 100.0);
+        }
         Ok(())
     }
 

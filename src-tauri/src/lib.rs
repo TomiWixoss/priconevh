@@ -22,13 +22,13 @@ pub fn run() {
                 service: Arc::new(Mutex::new(translation_service)),
             };
             
+            use tauri::Manager;
             app.manage(translation_state);
             
             // Setup autostart if enabled
             if config.auto_start {
                 #[cfg(desktop)]
                 {
-                    use tauri_plugin_autostart::MacosLauncher;
                     use tauri_plugin_autostart::ManagerExt;
                     
                     let _ = app.autolaunch().enable();
@@ -48,7 +48,7 @@ pub fn run() {
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_autostart::init(
             tauri_plugin_autostart::MacosLauncher::LaunchAgent,
-            Some(vec![]),
+            None,
         ))
         // Commands
         .invoke_handler(tauri::generate_handler![
