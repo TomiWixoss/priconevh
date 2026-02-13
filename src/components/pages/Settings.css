@@ -1,10 +1,9 @@
-/* Settings Dialog - Priconne Style */
+/* Settings Dialog Styles */
 
-.dialog-overlay {
+.settings-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
+  background: rgba(155, 127, 213, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,49 +11,51 @@
   animation: fadeIn 0.2s ease-out;
 }
 
-.dialog-container {
+.settings-dialog {
   width: 90%;
-  max-width: 600px;
+  max-width: 640px;
   max-height: 85vh;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
-  backdrop-filter: blur(20px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
+  background: #fff;
+  border: 4px solid #9b7fd5;
+  border-radius: 32px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   animation: slideUp 0.3s ease-out;
 }
 
-.dialog-header {
+/* Header */
+.settings-header {
   padding: 28px 32px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 3px solid #f0e7f7;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.dialog-title {
+.settings-title {
   font-size: 28px;
-  font-weight: 800;
-  color: #fff;
+  font-weight: 900;
+  color: #000;
   margin: 0 0 4px 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
 }
 
-.dialog-subtitle {
+.settings-subtitle {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  font-weight: 700;
+  color: #9b7fd5;
   margin: 0;
+  letter-spacing: 0.01em;
 }
 
-.dialog-close-button {
+.settings-close {
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
-  color: #fff;
+  background: #fef5f9;
+  border: 3px solid #ff6b9d;
+  border-radius: 20px;
+  color: #ff6b9d;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,97 +63,125 @@
   transition: all 0.2s;
 }
 
-.dialog-close-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
+.settings-close:hover {
+  background: #ff6b9d;
+  color: #fff;
 }
 
-.dialog-content {
+.settings-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Content */
+.settings-content {
   flex: 1;
   overflow-y: auto;
-  padding: 24px 32px;
+  padding: 40px;
 }
 
-.dialog-loading {
+.settings-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 64px;
-  color: #fff;
+  padding: 80px;
+  color: #9b7fd5;
+  gap: 20px;
 }
 
-.dialog-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
 }
 
-.dialog-section {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  padding: 20px;
-}
-
-.dialog-section-header {
-  margin-bottom: 16px;
-}
-
-.dialog-section-title {
-  font-size: 18px;
+.settings-loading p {
+  font-size: 16px;
   font-weight: 700;
-  color: #fff;
-  margin: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.01em;
 }
 
-.dialog-section-content {
+.settings-sections {
   display: flex;
   flex-direction: column;
+  gap: 28px;
+}
+
+/* Section */
+.settings-section {
+  border-bottom: 3px solid #f0e7f7;
+  padding-bottom: 24px;
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.section-header {
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
   gap: 12px;
 }
 
-.dialog-item {
+.section-icon {
+  width: 20px;
+  height: 20px;
+  color: #9b7fd5;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: #000;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.section-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Setting Item */
+.setting-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  transition: background 0.2s;
+  padding: 14px 0;
 }
 
-.dialog-item:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.dialog-item-info {
+.setting-info {
   flex: 1;
 }
 
-.dialog-item-title {
-  color: #fff;
-  font-weight: 600;
+.setting-title {
+  color: #000;
+  font-weight: 900;
   font-size: 14px;
   margin: 0 0 4px 0;
+  letter-spacing: 0.01em;
 }
 
-.dialog-item-description {
+.setting-description {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  color: #999;
   margin: 0;
+  line-height: 1.5;
 }
 
-/* Toggle Switch - Priconne Style */
-.toggle-switch {
+/* Toggle Switch */
+.toggle {
   position: relative;
   display: inline-flex;
   cursor: pointer;
 }
 
-.toggle-switch input {
+.toggle input {
   position: absolute;
   opacity: 0;
   width: 0;
@@ -160,13 +189,14 @@
 }
 
 .toggle-slider {
-  width: 52px;
+  width: 56px;
   height: 28px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: #e8e8e8;
+  border: 3px solid #ddd;
   border-radius: 14px;
   position: relative;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
+  display: block;
 }
 
 .toggle-slider::after {
@@ -174,205 +204,210 @@
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 20px;
-  height: 20px;
-  background: #fff;
+  width: 18px;
+  height: 18px;
+  background: #999;
   border-radius: 50%;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.toggle-switch input:checked + .toggle-slider {
-  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
-  border-color: #ff6b9d;
-}
-
-.toggle-switch input:checked + .toggle-slider::after {
-  transform: translateX(24px);
-}
-
-/* Form Elements */
-.dialog-label {
-  display: block;
-  margin-bottom: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.dialog-input {
-  width: 100%;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 12px;
-  color: #fff;
-  font-size: 14px;
   transition: all 0.2s;
 }
 
-.dialog-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+.toggle input:checked + .toggle-slider {
+  background: #7dd3c0;
+  border-color: #7dd3c0;
 }
 
-.dialog-input:focus {
-  outline: none;
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
+.toggle input:checked + .toggle-slider::after {
+  background: #fff;
+  transform: translateX(28px);
 }
 
-.dialog-hint {
-  margin-top: 8px;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+/* Form Elements */
+.input-label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: 0.01em;
 }
 
-.dialog-select {
+.text-input {
   width: 100%;
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 12px;
-  color: #fff;
+  background: #fef5f9;
+  border: 3px solid #ddd;
+  border-radius: 18px;
+  color: #000;
   font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.text-input::placeholder {
+  color: #bbb;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #ff6b9d;
+  background: #fff;
+}
+
+.input-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #999;
+}
+
+.select-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: #fef5f9;
+  border: 3px solid #ddd;
+  border-radius: 18px;
+  color: #000;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.dialog-select:focus {
+.select-input:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: #9b7fd5;
+  background: #fff;
 }
 
-.dialog-select option {
-  background: #667eea;
-  color: #fff;
+.select-input option {
+  background: #fff;
+  color: #000;
 }
 
-.dialog-radio-group {
+/* Radio Group */
+.radio-group {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.dialog-radio-item {
+.radio-item {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
+  background: #fef5f9;
+  border: 3px solid transparent;
+  border-radius: 18px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.dialog-radio-item:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
+.radio-item:hover {
+  border-color: #9b7fd5;
+  background: #f0e7f7;
 }
 
-.dialog-radio-item input[type="radio"] {
-  width: 20px;
-  height: 20px;
+.radio-item input[type="radio"] {
+  width: 18px;
+  height: 18px;
   cursor: pointer;
-  accent-color: #ff6b9d;
+  accent-color: #9b7fd5;
 }
 
-.dialog-radio-title {
-  color: #fff;
+.radio-label {
+  color: #000;
   font-size: 14px;
-  font-weight: 500;
-  margin: 0;
+  font-weight: 900;
+  letter-spacing: 0.01em;
 }
 
 /* Footer */
-.dialog-footer {
-  padding: 24px 32px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+.settings-footer {
+  padding: 20px 32px;
+  border-top: 3px solid #f0e7f7;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.dialog-message {
-  padding: 14px 18px;
+.settings-message {
+  padding: 14px 20px;
   font-size: 14px;
-  border-radius: 12px;
-  font-weight: 500;
+  border: 3px solid;
+  border-radius: 18px;
+  font-weight: 900;
+  letter-spacing: 0.01em;
 }
 
-.dialog-message.success {
-  background: rgba(74, 222, 128, 0.2);
-  border: 1px solid rgba(74, 222, 128, 0.4);
-  color: #fff;
+.settings-message.success {
+  background: #e8f8f3;
+  border-color: #7dd3c0;
+  color: #2d7a6a;
 }
 
-.dialog-message.error {
-  background: rgba(239, 68, 68, 0.2);
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  color: #fff;
+.settings-message.error {
+  background: #ffe8ed;
+  border-color: #ff6b9d;
+  color: #c0184a;
 }
 
-.dialog-actions {
+.settings-actions {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
 }
 
-.dialog-button-secondary {
+.button-secondary {
   padding: 12px 28px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 12px;
-  color: #fff;
+  background: #fef5f9;
+  border: 3px solid #ddd;
+  border-radius: 24px;
+  color: #000;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 900;
   cursor: pointer;
   transition: all 0.2s;
+  letter-spacing: 0.01em;
 }
 
-.dialog-button-secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-1px);
+.button-secondary:hover:not(:disabled) {
+  background: #f0e7f7;
+  border-color: #9b7fd5;
+  color: #9b7fd5;
 }
 
-.dialog-button-secondary:disabled {
-  opacity: 0.4;
+.button-secondary:disabled {
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
-.dialog-button-primary {
+.button-primary {
   padding: 12px 28px;
-  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  background: #ff6b9d;
   border: none;
-  border-radius: 12px;
+  border-radius: 24px;
   color: #fff;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 900;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
+  letter-spacing: 0.01em;
 }
 
-.dialog-button-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 107, 157, 0.5);
+.button-primary:hover:not(:disabled) {
+  background: #ff5a8f;
 }
 
-.dialog-button-primary:disabled {
-  opacity: 0.4;
+.button-primary:disabled {
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
-.dialog-section-icon {
-  display: none;
+.button-primary svg {
+  width: 18px;
+  height: 18px;
 }
