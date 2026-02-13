@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
-import { Github, Bell, Power, Globe, Loader2, Save } from "lucide-react";
+import { Github, Bell, Power, Globe, Loader2, Save, ArrowLeft } from "lucide-react";
 import { configApi } from "@/lib/api";
 import type { AppConfig } from "@/types";
 
-export function SettingsPage() {
+interface SettingsPageProps {
+  onBack: () => void;
+}
+
+export function SettingsPage({ onBack }: SettingsPageProps) {
   const [config, setConfig] = useState<AppConfig | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -53,12 +57,20 @@ export function SettingsPage() {
   }
 
   return (
-    <div className="w-full h-full overflow-y-auto">
+    <div className="w-full h-full overflow-y-auto bg-[hsl(var(--background))]">
       <div className="max-w-4xl mx-auto p-12">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Cài đặt</h1>
-          <p className="text-gray-400">Tùy chỉnh hoạt động của ứng dụng</p>
+        {/* Header with Back Button */}
+        <div className="mb-8 flex items-center gap-4">
+          <button
+            onClick={onBack}
+            className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <div>
+            <h1 className="text-4xl font-bold text-white">Cài đặt</h1>
+            <p className="text-gray-400">Tùy chỉnh hoạt động của ứng dụng</p>
+          </div>
         </div>
 
         <div className="space-y-6">
