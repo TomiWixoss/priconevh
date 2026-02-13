@@ -39,6 +39,47 @@ function App() {
       {showSettings && (
         <SettingsDialog onClose={() => setShowSettings(false)} />
       )}
+
+      {/* Update Dialog */}
+      {appUpdateHook.updateInfo && (
+        <div className="confirm-overlay">
+          <div className="update-dialog glass-panel">
+            <h3 className="update-title">Có bản cập nhật mới!</h3>
+            <div className="update-info">
+              <p className="update-version">
+                Phiên bản mới: <strong>{appUpdateHook.updateInfo.version}</strong>
+              </p>
+              <p className="update-current">
+                Phiên bản hiện tại: {appUpdateHook.updateInfo.current_version}
+              </p>
+            </div>
+            
+            {appUpdateHook.isDownloading ? (
+              <div className="update-progress">
+                <p>Đang tải xuống... {Math.round(appUpdateHook.progress)}%</p>
+                <div className="progress-bar">
+                  <div className="progress-fill" style={{ width: `${appUpdateHook.progress}%` }} />
+                </div>
+              </div>
+            ) : (
+              <div className="update-actions">
+                <button 
+                  onClick={appUpdateHook.dismissUpdate}
+                  className="update-btn update-cancel"
+                >
+                  Để sau
+                </button>
+                <button 
+                  onClick={appUpdateHook.downloadAndInstall}
+                  className="update-btn update-confirm"
+                >
+                  Cập nhật ngay
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

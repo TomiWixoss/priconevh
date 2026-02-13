@@ -4,3 +4,86 @@
   overflow: hidden;
   background: var(--bg-primary);
 }
+
+/* Update Dialog */
+.update-dialog {
+  max-width: 480px;
+  padding: 28px;
+  animation: slideUp 0.3s ease-out;
+}
+
+.update-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.update-info {
+  margin-bottom: 24px;
+}
+
+.update-version {
+  font-size: 15px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.update-version strong {
+  color: var(--accent);
+}
+
+.update-current {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.update-progress {
+  margin-bottom: 20px;
+}
+
+.update-progress p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.update-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.update-btn {
+  flex: 1;
+  padding: 14px 24px;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.update-cancel {
+  background: var(--bg-glass);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-glass);
+}
+
+.update-cancel:hover {
+  background: var(--bg-glass-hover);
+  border-color: var(--text-muted);
+}
+
+.update-confirm {
+  background: var(--accent);
+  color: white;
+}
+
+.update-confirm:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow-glow);
+}
