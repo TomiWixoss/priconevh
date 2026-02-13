@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Download, Play, FolderOpen, CheckCircle, AlertCircle, ChevronDown, Calendar } from "lucide-react";
-import { useGamePath } from "@/hooks/useGamePath";
-import { useTranslation } from "@/hooks/useTranslation";
-import { formatBytes, formatDate } from "@/lib/api";
-import type { TranslationVersion } from "@/types";
+import { useGamePath } from "../../hooks/useGamePath";
+import { useTranslation } from "../../hooks/useTranslation";
+import { formatBytes, formatDate } from "../../lib/api";
+import type { TranslationVersion } from "../../types";
 
 interface MainScreenProps {
   gamePathHook: ReturnType<typeof useGamePath>;
@@ -43,14 +43,12 @@ export function MainScreen({ gamePathHook, translationHook }: MainScreenProps) {
 
   const handleMainAction = async () => {
     if (!hasGame) {
-      // Chọn thư mục game
       await selectGameDirectory();
       return;
     }
 
     if (!selectedVersion || !gamePath) return;
 
-    // Cài đặt hoặc cập nhật việt hóa
     const isUpdate = currentInfo && currentInfo.version !== selectedVersion.version;
     
     if (isUpdate) {
@@ -70,72 +68,68 @@ export function MainScreen({ gamePathHook, translationHook }: MainScreenProps) {
 
   const getMainButtonIcon = () => {
     if (isInstalling) return null;
-    if (!hasGame) return <FolderOpen className="w-6 h-6" />;
-    if (hasTranslation && currentInfo?.version === selectedVersion?.version) return <Play className="w-6 h-6 fill-current" />;
-    return <Download className="w-6 h-6" />;
+    if (!hasGame) return <FolderOpen style={{ width: 24, height: 24 }} />;
+    if (hasTranslation && currentInfo?.version === selectedVersion?.version) return <Play style={{ width: 24, height: 24 }} />;
+    return <Download style={{ width: 24, height: 24 }} />;
   };
 
   return (
-    <div className="relative w-full h-full overflow-hidden">
+    <div className="main-screen">
       {/* Hero Background */}
-      <div className="absolute inset-0">
+      <div className="hero-background">
         <img 
           src="/hero.jpg" 
           alt="Princess Connect" 
-          className="w-full h-full object-cover"
+          className="hero-image"
           onError={(e) => {
             e.currentTarget.style.display = 'none';
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[hsl(var(--background))]/60 to-[hsl(var(--background))]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--background))]/80 via-transparent to-[hsl(var(--background))]/40" />
+        <div className="hero-overlay" />
+        <div className="hero-overlay-side" />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col justify-between p-12">
+      <div className="main-screen-content">
         {/* Top Section - Title & Info */}
-        <div className="flex-1 flex items-center">
-          <div className="max-w-2xl">
+        <div className="main-screen-top">
+          <div className="main-screen-info">
             {/* Title */}
-            <div className="mb-8">
-              <div className="inline-block px-4 py-1.5 rounded-full bg-yellow-400/20 border border-yellow-400/30 mb-4">
-                <span className="text-yellow-400 text-sm font-semibold">OFFICIAL RELEASE</span>
+            <div style={{ marginBottom: 32 }}>
+              <div className="badge">
+                <span className="badge-text">OFFICIAL RELEASE</span>
               </div>
-              <h1 className="text-7xl font-black mb-4 text-white drop-shadow-2xl leading-tight">
+              <h1 className="main-title">
                 PRINCESS<br/>CONNECT
               </h1>
-              <p className="text-3xl font-bold text-yellow-400 mb-4">Re:Dive</p>
-              <p className="text-lg text-gray-300">Bản việt hóa chính thức</p>
+              <p className="main-subtitle">Re:Dive</p>
+              <p className="main-description">Bản việt hóa chính thức</p>
             </div>
 
             {/* Status Info */}
             {hasGame && (
-              <div className="glass-effect rounded-xl p-4 border border-[hsl(var(--glass-border))] mb-6 max-w-md">
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                    hasTranslation ? 'bg-green-500/20' : 'bg-orange-500/20'
-                  }`}>
-                    {hasTranslation ? (
-                      <CheckCircle className="w-5 h-5 text-green-400" />
-                    ) : (
-                      <AlertCircle className="w-5 h-5 text-orange-400" />
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-xs text-gray-400">Trạng thái</p>
-                    <p className="text-sm text-white font-medium">
-                      {hasTranslation 
-                        ? `Đã cài việt hóa ${currentInfo?.version || ''}` 
-                        : 'Chưa cài việt hóa'}
-                    </p>
-                  </div>
-                  <button
-                    onClick={selectGameDirectory}
-                    className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs transition-all"
-                  >
-                    Đổi thư mục
-                  </button>
+              <div className="status-card">
+                <div className={`status-icon ${hasTranslation ? 'success' : 'warning'}`}>
+                  {hasTranslation ? (
+                    <CheckCircle style={{ width: 20, height: 20 }} />
+                  ) : (
+                    <AlertCircle style={{ width: 20, height: 20 }} />
+                  )}
                 </div>
+                <div className="status-info">
+                  <p className="status-label">Trạng thái</p>
+                  <p className="status-text">
+                    {hasTranslation 
+                      ? `Đã cài việt hóa ${currentInfo?.version || ''}` 
+                      : 'Chưa cài việt hóa'}
+                  </p>
+                </div>
+                <button
+                  onClick={selectGameDirectory}
+                  className="status-button"
+                >
+                  Đổi thư mục
+                </button>
               </div>
             )}
 
@@ -143,7 +137,7 @@ export function MainScreen({ gamePathHook, translationHook }: MainScreenProps) {
             <button
               onClick={handleMainAction}
               disabled={isInstalling || isGameLoading || (hasGame && !selectedVersion) || false}
-              className="h-16 px-12 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 disabled:from-gray-600 disabled:to-gray-700 text-gray-900 disabled:text-gray-400 font-bold text-lg flex items-center justify-center gap-3 transition-all shadow-2xl hover:shadow-yellow-500/50 glow-effect disabled:shadow-none disabled:cursor-not-allowed"
+              className="main-action-button"
             >
               {getMainButtonIcon()}
               {getMainButtonText()}
@@ -151,14 +145,14 @@ export function MainScreen({ gamePathHook, translationHook }: MainScreenProps) {
 
             {/* Progress Bar */}
             {isInstalling && (
-              <div className="glass-effect rounded-xl p-4 border border-[hsl(var(--glass-border))] mt-4 max-w-md">
-                <div className="mb-2">
-                  <p className="text-white text-sm font-medium mb-1">{progress.message}</p>
-                  <p className="text-xs text-gray-400">{Math.round(progress.progress)}%</p>
+              <div className="progress-card">
+                <div className="progress-info">
+                  <p className="progress-message">{progress.message}</p>
+                  <p className="progress-percent">{Math.round(progress.progress)}%</p>
                 </div>
-                <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                <div className="progress-bar-container">
                   <div 
-                    className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-300"
+                    className="progress-bar"
                     style={{ width: `${progress.progress}%` }}
                   />
                 </div>
@@ -168,28 +162,28 @@ export function MainScreen({ gamePathHook, translationHook }: MainScreenProps) {
         </div>
 
         {/* Bottom Section - Version Selector & News */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="main-screen-bottom">
           {/* Version Selector */}
           {hasGame && pack && pack.versions.length > 0 && (
-            <div className="glass-effect rounded-xl border border-[hsl(var(--glass-border))] overflow-hidden">
+            <div className="version-selector">
               <button
                 onClick={() => setShowVersions(!showVersions)}
-                className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
+                className="version-selector-button"
               >
-                <div className="flex items-center gap-3">
-                  <Download className="w-5 h-5 text-yellow-400" />
-                  <div className="text-left">
-                    <p className="text-xs text-gray-400">Phiên bản</p>
-                    <p className="text-sm text-white font-medium">
+                <div className="version-selector-left">
+                  <Download className="version-icon" />
+                  <div className="version-info">
+                    <p className="version-label">Phiên bản</p>
+                    <p className="version-value">
                       {selectedVersion?.version || pack.latest_version}
                     </p>
                   </div>
                 </div>
-                <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${showVersions ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`version-chevron ${showVersions ? 'open' : ''}`} />
               </button>
 
               {showVersions && (
-                <div className="border-t border-[hsl(var(--glass-border))] max-h-48 overflow-y-auto">
+                <div className="version-list">
                   {pack.versions.map((version: TranslationVersion) => {
                     const isSelected = selectedVersion?.version === version.version;
                     const isCurrent = currentInfo?.version === version.version;
@@ -201,19 +195,15 @@ export function MainScreen({ gamePathHook, translationHook }: MainScreenProps) {
                           setSelectedVersion(version);
                           setShowVersions(false);
                         }}
-                        className={`w-full p-3 text-left hover:bg-white/5 transition-colors border-b border-[hsl(var(--glass-border))] last:border-b-0 ${
-                          isSelected ? 'bg-yellow-500/10' : ''
-                        }`}
+                        className={`version-item ${isSelected ? 'selected' : ''}`}
                       >
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm text-white font-medium">{version.version}</span>
+                        <div className="version-item-header">
+                          <span className="version-name">{version.version}</span>
                           {isCurrent && (
-                            <span className="px-2 py-0.5 rounded bg-green-500/20 text-green-400 text-xs">
-                              Đã cài
-                            </span>
+                            <span className="version-badge">Đã cài</span>
                           )}
                         </div>
-                        <div className="flex items-center gap-3 text-xs text-gray-400">
+                        <div className="version-meta">
                           <span>{formatDate(version.release_date)}</span>
                           <span>•</span>
                           <span>{formatBytes(version.file_size)}</span>
@@ -227,15 +217,15 @@ export function MainScreen({ gamePathHook, translationHook }: MainScreenProps) {
           )}
 
           {/* News/Info Card */}
-          <div className="glass-effect rounded-xl p-4 border border-[hsl(var(--glass-border))]">
-            <div className="flex items-center gap-3 mb-2">
-              <Calendar className="w-5 h-5 text-blue-400" />
+          <div className="info-card">
+            <div className="info-card-header">
+              <Calendar className="info-icon" />
               <div>
-                <p className="text-xs text-gray-400">Thông báo</p>
-                <p className="text-sm text-white font-medium">Chào mừng!</p>
+                <p className="info-card-label">Thông báo</p>
+                <p className="info-card-title">Chào mừng!</p>
               </div>
             </div>
-            <p className="text-xs text-gray-400">
+            <p className="info-card-text">
               Công cụ cài đặt bản việt hóa cho Princess Connect Re:Dive
             </p>
           </div>

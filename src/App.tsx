@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { X, Minus, Settings, Bell } from "lucide-react";
-import { MainScreen } from "@/components/pages/MainScreen";
-import { SettingsPage } from "@/components/pages/Settings";
-import { useGamePath } from "@/hooks/useGamePath";
-import { useTranslation } from "@/hooks/useTranslation";
-import { useAppUpdate } from "@/hooks/useAppUpdate";
-import type { AppUpdateInfo } from "@/types";
+import { MainScreen } from "./components/pages/MainScreen";
+import { SettingsPage } from "./components/pages/Settings";
+import { useGamePath } from "./hooks/useGamePath";
+import { useTranslation } from "./hooks/useTranslation";
+import { useAppUpdate } from "./hooks/useAppUpdate";
+import type { AppUpdateInfo } from "./types";
 
 type Page = "main" | "settings";
 
@@ -44,49 +44,46 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[hsl(var(--background))]">
+    <div className="app-container">
       {/* Custom Title Bar */}
-      <div 
-        data-tauri-drag-region 
-        className="h-10 bg-[hsl(var(--sidebar-bg))]/95 backdrop-blur-sm flex items-center justify-between px-4 border-b border-[hsl(var(--card-border))] flex-shrink-0"
-      >
-        <div className="flex items-center gap-3">
-          <div className="w-5 h-5 rounded bg-gradient-to-br from-yellow-400 to-orange-500" />
-          <span className="text-sm font-semibold text-white">Priconne VN Installer</span>
+      <div data-tauri-drag-region className="title-bar">
+        <div className="title-bar-left">
+          <div className="title-bar-logo" />
+          <span className="title-bar-title">Priconne VN Installer</span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="title-bar-right">
           {updateInfo && (
             <button 
-              className="w-9 h-9 flex items-center justify-center text-yellow-400 hover:bg-white/10 rounded transition-colors"
+              className="title-bar-button update"
               title="Có bản cập nhật mới"
             >
-              <Bell className="w-4 h-4" />
+              <Bell style={{ width: 16, height: 16 }} />
             </button>
           )}
           <button
             onClick={() => setCurrentPage(currentPage === "main" ? "settings" : "main")}
-            className="w-9 h-9 flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white rounded transition-colors"
+            className="title-bar-button"
             title="Cài đặt"
           >
-            <Settings className="w-4 h-4" />
+            <Settings style={{ width: 16, height: 16 }} />
           </button>
           <button 
             onClick={handleMinimize}
-            className="w-9 h-9 flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white rounded transition-colors"
+            className="title-bar-button"
           >
-            <Minus className="w-4 h-4" />
+            <Minus style={{ width: 16, height: 16 }} />
           </button>
           <button 
             onClick={handleClose}
-            className="w-9 h-9 flex items-center justify-center text-gray-400 hover:bg-red-500 hover:text-white rounded transition-colors"
+            className="title-bar-button close"
           >
-            <X className="w-4 h-4" />
+            <X style={{ width: 16, height: 16 }} />
           </button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-hidden">
+      <div className="main-content">
         {currentPage === "main" ? (
           <MainScreen
             gamePathHook={gamePathHook}

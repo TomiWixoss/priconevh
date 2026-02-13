@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Github, Bell, Power, Globe, Loader2, Save, ArrowLeft } from "lucide-react";
-import { configApi } from "@/lib/api";
-import type { AppConfig } from "@/types";
+import { configApi } from "../../lib/api";
+import type { AppConfig } from "../../types";
 
 interface SettingsPageProps {
   onBack: () => void;
@@ -47,128 +47,119 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 text-yellow-400 animate-spin mx-auto mb-4" />
-          <p className="text-white">Đang tải cài đặt...</p>
+      <div className="loading-container">
+        <div className="loading-content">
+          <Loader2 className="loading-spinner" />
+          <p className="loading-text">Đang tải cài đặt...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full h-full overflow-y-auto bg-[hsl(var(--background))]">
-      <div className="max-w-4xl mx-auto p-12">
+    <div className="settings-page">
+      <div className="settings-container">
         {/* Header with Back Button */}
-        <div className="mb-8 flex items-center gap-4">
+        <div className="settings-header">
           <button
             onClick={onBack}
-            className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all"
+            className="back-button"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft style={{ width: 20, height: 20 }} />
           </button>
           <div>
-            <h1 className="text-4xl font-bold text-white">Cài đặt</h1>
-            <p className="text-gray-400">Tùy chỉnh hoạt động của ứng dụng</p>
+            <h1 className="settings-title">Cài đặt</h1>
+            <p className="settings-subtitle">Tùy chỉnh hoạt động của ứng dụng</p>
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="settings-sections">
           {/* Auto Update Settings */}
-          <div className="glass-effect rounded-2xl border border-[hsl(var(--glass-border))] overflow-hidden">
-            <div className="p-6 border-b border-[hsl(var(--glass-border))]">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
-                  <Bell className="w-5 h-5 text-yellow-400" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-white">Tự động cập nhật</h3>
-                  <p className="text-sm text-gray-400">Quản lý cập nhật bản việt hóa</p>
-                </div>
+          <div className="settings-section">
+            <div className="settings-section-header">
+              <div className="settings-section-icon yellow">
+                <Bell style={{ width: 20, height: 20 }} />
+              </div>
+              <div>
+                <h3 className="settings-section-title">Tự động cập nhật</h3>
+                <p className="settings-section-description">Quản lý cập nhật bản việt hóa</p>
               </div>
             </div>
-            <div className="p-6 space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
-                <div className="flex-1">
-                  <p className="text-white font-medium mb-1">Tự động cập nhật việt hóa</p>
-                  <p className="text-sm text-gray-400">Khi có bản mới, tự động tải và cài đặt</p>
+            <div className="settings-section-content">
+              <div className="settings-item">
+                <div className="settings-item-info">
+                  <p className="settings-item-title">Tự động cập nhật việt hóa</p>
+                  <p className="settings-item-description">Khi có bản mới, tự động tải và cài đặt</p>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
+                <label className="toggle-switch">
                   <input
                     type="checkbox"
-                    className="sr-only peer"
                     checked={config?.auto_update || false}
                     onChange={(e) => setConfig(prev => prev ? { ...prev, auto_update: e.target.checked } : null)}
                   />
-                  <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div>
+                  <div className="toggle-slider"></div>
                 </label>
               </div>
 
-              <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
-                <div className="flex-1">
-                  <p className="text-white font-medium mb-1">Kiểm tra khi khởi động</p>
-                  <p className="text-sm text-gray-400">Kiểm tra bản cập nhật mỗi khi mở ứng dụng</p>
+              <div className="settings-item">
+                <div className="settings-item-info">
+                  <p className="settings-item-title">Kiểm tra khi khởi động</p>
+                  <p className="settings-item-description">Kiểm tra bản cập nhật mỗi khi mở ứng dụng</p>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
+                <label className="toggle-switch">
                   <input
                     type="checkbox"
-                    className="sr-only peer"
                     checked={config?.check_update_on_startup || false}
                     onChange={(e) => setConfig(prev => prev ? { ...prev, check_update_on_startup: e.target.checked } : null)}
                   />
-                  <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div>
+                  <div className="toggle-slider"></div>
                 </label>
               </div>
             </div>
           </div>
 
           {/* Auto Start Settings */}
-          <div className="glass-effect rounded-2xl border border-[hsl(var(--glass-border))] overflow-hidden">
-            <div className="p-6 border-b border-[hsl(var(--glass-border))]">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                  <Power className="w-5 h-5 text-blue-400" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-white">Khởi động cùng Windows</h3>
-                  <p className="text-sm text-gray-400">Tự động chạy khi máy tính khởi động</p>
-                </div>
+          <div className="settings-section">
+            <div className="settings-section-header">
+              <div className="settings-section-icon blue">
+                <Power style={{ width: 20, height: 20 }} />
+              </div>
+              <div>
+                <h3 className="settings-section-title">Khởi động cùng Windows</h3>
+                <p className="settings-section-description">Tự động chạy khi máy tính khởi động</p>
               </div>
             </div>
-            <div className="p-6">
-              <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
-                <div className="flex-1">
-                  <p className="text-white font-medium mb-1">Chạy khi khởi động</p>
-                  <p className="text-sm text-gray-400">Ứng dụng sẽ chạy ngầm khi Windows khởi động</p>
+            <div className="settings-section-content">
+              <div className="settings-item">
+                <div className="settings-item-info">
+                  <p className="settings-item-title">Chạy khi khởi động</p>
+                  <p className="settings-item-description">Ứng dụng sẽ chạy ngầm khi Windows khởi động</p>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
+                <label className="toggle-switch">
                   <input
                     type="checkbox"
-                    className="sr-only peer"
                     checked={config?.auto_start || false}
                     onChange={(e) => setConfig(prev => prev ? { ...prev, auto_start: e.target.checked } : null)}
                   />
-                  <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div>
+                  <div className="toggle-slider"></div>
                 </label>
               </div>
             </div>
           </div>
 
           {/* GitHub Repository */}
-          <div className="glass-effect rounded-2xl border border-[hsl(var(--glass-border))] overflow-hidden">
-            <div className="p-6 border-b border-[hsl(var(--glass-border))]">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
-                  <Github className="w-5 h-5 text-purple-400" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-white">Repository việt hóa</h3>
-                  <p className="text-sm text-gray-400">Nguồn tải bản việt hóa</p>
-                </div>
+          <div className="settings-section">
+            <div className="settings-section-header">
+              <div className="settings-section-icon purple">
+                <Github style={{ width: 20, height: 20 }} />
+              </div>
+              <div>
+                <h3 className="settings-section-title">Repository việt hóa</h3>
+                <p className="settings-section-description">Nguồn tải bản việt hóa</p>
               </div>
             </div>
-            <div className="p-6">
-              <label className="block mb-2 text-sm font-medium text-gray-300">
+            <div className="settings-section-content">
+              <label className="input-label">
                 GitHub Repository
               </label>
               <input
@@ -176,33 +167,31 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
                 value={config?.github_repo || ""}
                 onChange={(e) => setConfig(prev => prev ? { ...prev, github_repo: e.target.value } : null)}
                 placeholder="username/repository"
-                className="w-full px-4 py-3 rounded-xl bg-black/30 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500/50 transition-colors"
+                className="input-field"
               />
-              <p className="mt-2 text-xs text-gray-500">Ví dụ: tomisakae/priconevh-translation</p>
+              <p className="input-hint">Ví dụ: tomisakae/priconevh-translation</p>
             </div>
           </div>
 
           {/* Language Settings */}
-          <div className="glass-effect rounded-2xl border border-[hsl(var(--glass-border))] overflow-hidden">
-            <div className="p-6 border-b border-[hsl(var(--glass-border))]">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
-                  <Globe className="w-5 h-5 text-green-400" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-white">Ngôn ngữ</h3>
-                  <p className="text-sm text-gray-400">Chọn ngôn ngữ giao diện</p>
-                </div>
+          <div className="settings-section">
+            <div className="settings-section-header">
+              <div className="settings-section-icon green">
+                <Globe style={{ width: 20, height: 20 }} />
+              </div>
+              <div>
+                <h3 className="settings-section-title">Ngôn ngữ</h3>
+                <p className="settings-section-description">Chọn ngôn ngữ giao diện</p>
               </div>
             </div>
-            <div className="p-6">
-              <label className="block mb-2 text-sm font-medium text-gray-300">
+            <div className="settings-section-content">
+              <label className="input-label">
                 Ngôn ngữ giao diện
               </label>
               <select
                 value={config?.language || "vi"}
                 onChange={(e) => setConfig(prev => prev ? { ...prev, language: e.target.value } : null)}
-                className="w-full px-4 py-3 rounded-xl bg-black/30 border border-white/10 text-white focus:outline-none focus:border-yellow-500/50 transition-colors"
+                className="select-field"
               >
                 <option value="vi">Tiếng Việt</option>
                 <option value="en">English</option>
@@ -213,20 +202,20 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
         </div>
 
         {/* Save Button */}
-        <div className="mt-8 flex items-center gap-4">
+        <div className="save-button-container">
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="flex-1 h-14 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 disabled:from-gray-600 disabled:to-gray-700 text-gray-900 disabled:text-gray-400 font-bold text-lg flex items-center justify-center gap-3 transition-all shadow-lg disabled:shadow-none disabled:cursor-not-allowed"
+            className="save-button"
           >
             {isSaving ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <Loader2 style={{ width: 20, height: 20 }} />
                 Đang lưu...
               </>
             ) : (
               <>
-                <Save className="w-5 h-5" />
+                <Save style={{ width: 20, height: 20 }} />
                 Lưu cài đặt
               </>
             )}
@@ -235,12 +224,8 @@ export function SettingsPage({ onBack }: SettingsPageProps) {
 
         {/* Message */}
         {message && (
-          <div className={`mt-4 p-4 rounded-xl ${
-            message.type === "success" 
-              ? "bg-green-500/20 border border-green-500/30 text-green-400" 
-              : "bg-red-500/20 border border-red-500/30 text-red-400"
-          }`}>
-            <p className="text-sm font-medium">{message.text}</p>
+          <div className={`message ${message.type}`}>
+            <p className="message-text">{message.text}</p>
           </div>
         )}
       </div>
