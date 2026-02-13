@@ -26,12 +26,6 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
   const hasTranslation = gameInfo?.has_translation;
 
   useEffect(() => {
-    if (!gamePath) {
-      autoDetectGame();
-    }
-  }, []);
-
-  useEffect(() => {
     if (hasGame) {
       loadPack();
       if (gamePath) {
@@ -95,6 +89,7 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
 
   const getMainButtonText = () => {
     if (isInstalling) return "Đang cài đặt...";
+    if (isGameLoading) return "Đang tìm game...";
     if (!hasGame) return "Chọn thư mục game";
     if (hasTranslation && currentInfo?.version === selectedVersion?.version) return "Cài lại";
     if (hasTranslation && currentInfo?.version !== selectedVersion?.version) return "Cập nhật";
@@ -102,7 +97,7 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
   };
 
   const getMainButtonIcon = () => {
-    if (isInstalling) return <Loader2 size={20} className="btn-icon spinning" />;
+    if (isInstalling || isGameLoading) return <Loader2 size={20} className="btn-icon spinning" />;
     if (!hasGame) return <FolderOpen size={20} />;
     if (hasTranslation && currentInfo?.version === selectedVersion?.version) return <Download size={20} />;
     if (hasTranslation && currentInfo?.version !== selectedVersion?.version) return <Download size={20} />;
@@ -177,12 +172,12 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
             </div>
             <div className="path-content">
               <p className="path-value">
-                {hasGame ? gamePath : "Chưa chọn thư mục game"}
+                {isGameLoading ? "Đang tìm kiếm thư mục game..." : hasGame ? gamePath : "Chưa chọn thư mục game"}
               </p>
               <button 
                 onClick={selectGameDirectory}
                 className="path-btn"
-                disabled={isInstalling}
+                disabled={isInstalling || isGameLoading}
               >
                 {hasGame ? "Đổi" : "Chọn"}
               </button>

@@ -5,7 +5,6 @@ import { SettingsDialog } from "./components/pages/Settings";
 import { useGamePath } from "./hooks/useGamePath";
 import { useTranslation } from "./hooks/useTranslation";
 import { useAppUpdate } from "./hooks/useAppUpdate";
-import { initFirebase } from "./lib/firebase";
 import "./App.css";
 
 function App() {
@@ -14,11 +13,6 @@ function App() {
   const gamePathHook = useGamePath();
   const translationHook = useTranslation();
   const appUpdateHook = useAppUpdate();
-
-  // Initialize Firebase on app start
-  useEffect(() => {
-    initFirebase();
-  }, []);
 
   useEffect(() => {
     appUpdateHook.checkForUpdates();

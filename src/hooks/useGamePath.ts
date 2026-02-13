@@ -18,22 +18,38 @@ export function useGamePath() {
     setError(null);
 
     try {
-      // Load từ config
       const config = await configApi.load();
       
       if (config.game_path) {
-        // Validate path
         try {
           const info = await gameApi.getInfo(config.game_path);
           setGamePath(config.game_path);
           setGameInfo(info);
+          setIsLoading(false);
         } catch (err) {
-          // Path không hợp lệ, thử auto detect
-          await autoDetectGame();
+          await autoDetectGameInternal();
         }
       } else {
-        // Không có path trong config, thử auto detect
-        await autoDetectGame();
+        await autoDetectGameInternal();
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+      setIsLoading(false);
+    }
+  };
+
+  const autoDetectGameInternal = async () => {
+    try {
+      const detectedPath = await gameApi.autoDetect();
+      
+      if (detectedPath) {
+        const info = await gameApi.getInfo(detectedPath);
+        setGamePath(detectedPath);
+        setGameInfo(info);
+        
+        await configApi.updateGamePath(detectedPath);
+      } else {
+        setError("Không tìm thấy thư mục game. Vui lòng chọn thủ công.");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -43,22 +59,9 @@ export function useGamePath() {
   };
 
   const autoDetectGame = async () => {
-    try {
-      const detectedPath = await gameApi.autoDetect();
-      
-      if (detectedPath) {
-        const info = await gameApi.getInfo(detectedPath);
-        setGamePath(detectedPath);
-        setGameInfo(info);
-        
-        // Lưu vào config
-        await configApi.updateGamePath(detectedPath);
-      } else {
-        setError("Không tìm thấy thư mục game. Vui lòng chọn thủ công.");
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    }
+    setIsLoading(true);
+    setError(null);
+    await autoDetectGameInternal();
   };
 
   const selectGameDirectory = async () => {
