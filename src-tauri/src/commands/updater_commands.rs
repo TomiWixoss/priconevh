@@ -1,22 +1,11 @@
-use crate::services::UpdaterService;
-use serde::{Deserialize, Serialize};
+use crate::services::{UpdaterService, AppUpdateInfo};
 use std::sync::Arc;
-use tauri::{AppHandle, Emitter, Manager};
+use tauri::{AppHandle, Emitter};
 use tokio::sync::Mutex;
 
 // State để share UpdaterService
 pub struct UpdaterState {
     pub service: Arc<Mutex<UpdaterService>>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AppUpdateInfo {
-    pub version: String,
-    pub current_version: String,
-    pub release_date: String,
-    pub download_url: String,
-    pub file_size: u64,
-    pub changelog: Vec<String>,
 }
 
 #[tauri::command]

@@ -10,4 +10,4 @@ pub use download_service::DownloadService;
 pub use translation_service::TranslationService;
 pub use github_service::GitHubService;
 pub use file_service::FileService;
-pub use updater_service::UpdaterService;
+pub use updater_service::{UpdaterService, AppUpdateInfo};
