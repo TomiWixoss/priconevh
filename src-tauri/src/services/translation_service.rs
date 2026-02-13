@@ -124,14 +124,38 @@ impl TranslationService {
         self.github_service.check_for_updates(current_version).await
     }
 
-    /// Backup bản việt hóa cũ
+    /// Backup bản việt hóa cũ (CHỈ backup files việt hóa, KHÔNG backup toàn bộ game)
     fn backup_old_translation(&self, game_path: &Path) -> Result<(), String> {
-        let translation_dirs = vec!["localization", "translations", "data"];
+        // Chỉ backup các thư mục/file liên quan đến việt hóa
+        let translation_items = vec![
+            ("localization", true),  // (path, is_directory)
+            ("translations", true),
+            ("translation.dat", false),
+            ("strings.json", false),
+            ("translation_info.json", false),
+        ];
 
-        for dir_name in translation_dirs {
-            let dir_path = game_path.join(dir_name);
-            if dir_path.exists() {
-                FileService::create_backup(&dir_path, dir_name)?;
+        let backup_dir = game_path.join("translation_backup");
+        
+        // Xóa backup cũ nếu có
+        if backup_dir.exists() {
+            FileService::remove_path(&backup_dir)?;
+        }
+        
+        std::fs::create_dir_all(&backup_dir)
+            .map_err(|e| format!("Failed to create backup directory: {}", e))?;
+
+        for (item_name, is_dir) in translation_items {
+            let item_path = game_path.join(item_name);
+            if item_path.exists() {
+                let backup_path = backup_dir.join(item_name);
+                
+                if is_dir {
+                    FileService::copy_dir_recursive(&item_path, &backup_path)?;
+                } else {
+                    std::fs::copy(&item_path, &backup_path)
+                        .map_err(|e| format!("Failed to backup file {}: {}", item_name, e))?;
+                }
             }
         }
 

@@ -6,6 +6,7 @@ import type {
   TranslationVersion,
   TranslationInfo,
   AppConfig,
+  AppUpdateInfo,
   ProgressEvent,
   DiskSpace,
 } from "@/types";
@@ -13,6 +14,8 @@ import type {
 // Game API
 export const gameApi = {
   autoDetect: () => invoke<string | null>("auto_detect_game"),
+  
+  selectDirectory: () => invoke<string | null>("select_game_directory"),
   
   validatePath: (path: string) => invoke<GameInfo>("validate_game_path", { path }),
   
@@ -81,6 +84,23 @@ export const systemApi = {
   
   createBackup: (sourcePath: string, backupName: string) =>
     invoke<string>("create_backup", { sourcePath, backupName }),
+};
+
+// Updater API
+export const updaterApi = {
+  checkUpdate: () => invoke<AppUpdateInfo | null>("check_app_update"),
+  
+  downloadAndInstall: () => invoke<void>("download_and_install_update"),
+  
+  onProgress: (callback: (progress: number) => void) =>
+    listen<number>("updater-progress", (event) => {
+      callback(event.payload);
+    }),
+  
+  onCompleted: (callback: () => void) =>
+    listen("updater-completed", () => {
+      callback();
+    }),
 };
 
 // Helper functions

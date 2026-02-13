@@ -54,6 +54,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             // Game commands
             auto_detect_game,
+            select_game_directory,
             validate_game_path,
             get_game_info,
             
@@ -79,6 +80,10 @@ pub fn run() {
             get_directory_size,
             open_directory,
             create_backup,
+            
+            // Updater commands
+            check_app_update,
+            download_and_install_update,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -38,6 +38,14 @@ export interface AppConfig {
   language: string;
 }
 
+// App Update Types
+export interface AppUpdateInfo {
+  version: string;
+  current_version: string;
+  date: string | null;
+  body: string | null;
+}
+
 // Progress Event Types
 export interface ProgressEvent {
   message: string;

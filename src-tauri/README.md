@@ -38,8 +38,9 @@ src-tauri/src/
 - Tải bản việt hóa từ GitHub Releases
 - Cài đặt với progress tracking
 - Cập nhật tự động
-- Backup trước khi cài/gỡ
+- **Backup thông minh**: CHỈ backup files việt hóa cũ (localization, translations), KHÔNG backup toàn bộ game
 - Gỡ bỏ bản việt hóa
+- Restore từ backup nếu cần
 
 ### 3. GitHub Integration
 - Lấy danh sách releases
@@ -58,6 +59,29 @@ src-tauri/src/
 - Auto-update settings
 - Auto-start on boot
 - Custom GitHub repository
+
+### 6. App Auto-Update
+- Kiểm tra phiên bản mới của trình cài đặt
+- Tự động tải và cài đặt update
+- Progress tracking
+- Signed updates với keypair
+
+## Backup Strategy
+
+**QUAN TRỌNG**: Ứng dụng CHỈ backup các files liên quan đến việt hóa, KHÔNG backup toàn bộ game để tránh tốn dung lượng.
+
+### Files được backup:
+- `localization/` - Thư mục chứa file ngôn ngữ
+- `translations/` - Thư mục chứa bản dịch
+- `translation.dat` - File data việt hóa
+- `strings.json` - File strings
+- `translation_info.json` - Metadata
+
+### Vị trí backup:
+`{game_directory}/translation_backup/`
+
+### Kích thước:
+Thường chỉ vài MB thay vì hàng chục GB nếu backup cả game.
 
 ## API Commands
 
@@ -97,6 +121,12 @@ open_directory(path: String) -> ()
 create_backup(source_path: String, backup_name: String) -> String
 ```
 
+### Updater Commands
+```rust
+check_app_update() -> Option<AppUpdateInfo>
+download_and_install_update() -> ()
+```
+
 ## Events
 
 ### Progress Events
@@ -105,6 +135,16 @@ create_backup(source_path: String, backup_name: String) -> String
 listen("translation-progress", (event) => {
   const [message, progress] = event.payload;
   // message: string, progress: 0-100
+});
+
+// Listen to updater progress
+listen("updater-progress", (event) => {
+  const progress = event.payload; // 0-100
+});
+
+// Listen to updater completed
+listen("updater-completed", () => {
+  // Update completed, app will restart
 });
 ```
 
