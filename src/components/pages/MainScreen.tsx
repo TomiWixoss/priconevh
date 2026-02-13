@@ -73,7 +73,7 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
   };
 
   const getMainButtonText = () => {
-    if (isInstalling) return "ĐANG CÀI ĐẶT...";
+    if (isInstalling) return "Đang cài đặt...";
     if (!hasGame) return "Chọn thư mục game";
     if (hasTranslation && currentInfo?.version === selectedVersion?.version) return "Tải game";
     if (hasTranslation && currentInfo?.version !== selectedVersion?.version) return "Cập nhật";
@@ -88,9 +88,12 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
   };
 
   return (
-    <div className="main-screen" data-tauri-drag-region>
+    <div className="screen">
+      {/* Drag Region - Top area for dragging window */}
+      <div className="drag-region" data-tauri-drag-region />
+
       {/* Hero Background */}
-      <div className="hero-bg">
+      <div className="hero">
         <img 
           src="/hero.jpg" 
           alt="Princess Connect" 
@@ -99,46 +102,39 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
             e.currentTarget.style.display = 'none';
           }}
         />
+        <div className="hero-overlay" />
       </div>
 
-      {/* Window Controls - Top Right */}
-      <div className="window-controls">
-        <button onClick={onOpenSettings} className="control-btn" title="Cài đặt">
+      {/* Window Controls */}
+      <div className="controls">
+        <button onClick={onOpenSettings} className="ctrl-btn">
           <Settings />
         </button>
-        <button onClick={handleMinimize} className="control-btn" title="Thu nhỏ">
+        <button onClick={handleMinimize} className="ctrl-btn">
           <Minus />
         </button>
-        <button onClick={handleClose} className="control-btn close-btn" title="Đóng">
+        <button onClick={handleClose} className="ctrl-btn close">
           <X />
         </button>
       </div>
 
       {/* Content */}
       <div className="content">
-        {/* Logo & Title - Top Left */}
-        <div className="game-info">
-          <div className="logo">PC</div>
-          <div className="info-text">
-            <h1 className="title">PRINCESS CONNECT</h1>
-            <p className="subtitle">Re:Dive</p>
-            <div className="meta">
-              <span className="badge">OFFICIAL RELEASE</span>
-              <span className="date">2026.01.22</span>
-            </div>
-          </div>
+        {/* Title */}
+        <div className="header">
+          <h1 className="title">Trình cài đặt việt hóa Priconne</h1>
         </div>
 
-        {/* Actions - Bottom Right */}
+        {/* Actions */}
         <div className="actions">
           {/* Version Selector */}
           {hasGame && pack && pack.versions.length > 0 && (
-            <div className="version-selector">
+            <div className="version-wrap">
               <button
                 onClick={() => setShowVersions(!showVersions)}
                 className="version-btn"
               >
-                {selectedVersion?.version || pack.latest_version}
+                <span>Phiên bản: {selectedVersion?.version || pack.latest_version}</span>
               </button>
 
               {showVersions && (
@@ -154,13 +150,13 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
                           setSelectedVersion(version);
                           setShowVersions(false);
                         }}
-                        className={`version-item ${isSelected ? 'selected' : ''}`}
+                        className={`version-item ${isSelected ? 'active' : ''}`}
                       >
-                        <div className="version-header">
-                          <span className="version-name">{version.version}</span>
-                          {isCurrent && <span className="current-badge">Đã cài</span>}
+                        <div className="v-header">
+                          <span className="v-name">{version.version}</span>
+                          {isCurrent && <span className="v-badge">Đã cài</span>}
                         </div>
-                        <div className="version-meta">
+                        <div className="v-meta">
                           <span>{formatDate(version.release_date)}</span>
                           <span>•</span>
                           <span>{formatBytes(version.file_size)}</span>
@@ -185,7 +181,7 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
             </button>
 
             {/* Game Menu */}
-            <div className="menu-wrapper">
+            <div className="menu-wrap">
               <button
                 onClick={() => setShowGameMenu(!showGameMenu)}
                 className="menu-btn"
@@ -195,7 +191,7 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
               </button>
 
               {showGameMenu && (
-                <div className="game-menu">
+                <div className="menu">
                   <button
                     onClick={() => {
                       selectGameDirectory();
@@ -219,10 +215,10 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
 
           {/* Progress */}
           {isInstalling && (
-            <div className="progress">
+            <div className="progress-wrap">
               <div className="progress-text">
-                <span className="progress-msg">{progress.message}</span>
-                <span className="progress-pct">{Math.round(progress.progress)}%</span>
+                <span>{progress.message}</span>
+                <span>{Math.round(progress.progress)}%</span>
               </div>
               <div className="progress-bar">
                 <div className="progress-fill" style={{ width: `${progress.progress}%` }} />

@@ -1,9 +1,10 @@
-/* Settings Dialog - AWWWARDS Style */
+/* Settings Dialog - Priconne Style */
 
 .dialog-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,60 +14,63 @@
 
 .dialog-container {
   width: 90%;
-  max-width: 640px;
+  max-width: 600px;
   max-height: 85vh;
-  background: #000;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   animation: slideUp 0.3s ease-out;
 }
 
 .dialog-header {
-  padding: 32px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 28px 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
 }
 
 .dialog-title {
-  font-size: 32px;
-  font-weight: 900;
+  font-size: 28px;
+  font-weight: 800;
   color: #fff;
   margin: 0 0 4px 0;
-  letter-spacing: -0.02em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .dialog-subtitle {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   margin: 0;
 }
 
 .dialog-close-button {
-  width: 48px;
-  height: 48px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
 }
 
 .dialog-close-button:hover {
-  background: #fff;
-  color: #000;
-  border-color: #fff;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
 }
 
 .dialog-content {
   flex: 1;
   overflow-y: auto;
-  padding: 32px;
+  padding: 24px 32px;
 }
 
 .dialog-loading {
@@ -81,41 +85,47 @@
 .dialog-sections {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 
 .dialog-section {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding-bottom: 32px;
-}
-
-.dialog-section:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 20px;
 }
 
 .dialog-section-header {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .dialog-section-title {
   font-size: 18px;
   font-weight: 700;
   color: #fff;
-  margin: 0 0 4px 0;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .dialog-section-content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .dialog-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.dialog-item:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .dialog-item-info {
@@ -131,11 +141,11 @@
 
 .dialog-item-description {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   margin: 0;
 }
 
-/* Toggle Switch */
+/* Toggle Switch - Priconne Style */
 .toggle-switch {
   position: relative;
   display: inline-flex;
@@ -150,12 +160,13 @@
 }
 
 .toggle-slider {
-  width: 48px;
-  height: 24px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 52px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 14px;
   position: relative;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .toggle-slider::after {
@@ -163,100 +174,113 @@
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background: #fff;
-  transition: transform 0.2s ease;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .toggle-switch input:checked + .toggle-slider {
-  background: #d4ff00;
-  border-color: #d4ff00;
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  border-color: #ff6b9d;
 }
 
 .toggle-switch input:checked + .toggle-slider::after {
-  background: #000;
   transform: translateX(24px);
 }
 
 /* Form Elements */
 .dialog-label {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   font-size: 14px;
   font-weight: 600;
   color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .dialog-input {
   width: 100%;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
   color: #fff;
   font-size: 14px;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
 }
 
 .dialog-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .dialog-input:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .dialog-hint {
   margin-top: 8px;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .dialog-select {
   width: 100%;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
   color: #fff;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
 }
 
 .dialog-select:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.dialog-select option {
+  background: #667eea;
+  color: #fff;
 }
 
 .dialog-radio-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .dialog-radio-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
 }
 
 .dialog-radio-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .dialog-radio-item input[type="radio"] {
   width: 20px;
   height: 20px;
   cursor: pointer;
+  accent-color: #ff6b9d;
 }
 
 .dialog-radio-title {
@@ -268,29 +292,30 @@
 
 /* Footer */
 .dialog-footer {
-  padding: 32px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 24px 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
 .dialog-message {
-  padding: 16px;
+  padding: 14px 18px;
   font-size: 14px;
-  border: 1px solid;
+  border-radius: 12px;
+  font-weight: 500;
 }
 
 .dialog-message.success {
-  background: rgba(212, 255, 0, 0.1);
-  border-color: #d4ff00;
-  color: #d4ff00;
+  background: rgba(74, 222, 128, 0.2);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  color: #fff;
 }
 
 .dialog-message.error {
-  background: rgba(255, 0, 0, 0.1);
-  border-color: #ff0000;
-  color: #ff0000;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fff;
 }
 
 .dialog-actions {
@@ -300,46 +325,51 @@
 }
 
 .dialog-button-secondary {
-  padding: 14px 32px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 12px 28px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
   color: #fff;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
 }
 
 .dialog-button-secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
 }
 
 .dialog-button-secondary:disabled {
-  opacity: 0.3;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .dialog-button-primary {
-  padding: 14px 32px;
-  background: #d4ff00;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
   border: none;
-  color: #000;
+  border-radius: 12px;
+  color: #fff;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   gap: 8px;
+  box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
 }
 
 .dialog-button-primary:hover:not(:disabled) {
-  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 107, 157, 0.5);
 }
 
 .dialog-button-primary:disabled {
-  opacity: 0.3;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
