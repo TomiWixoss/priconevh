@@ -17,7 +17,7 @@ impl Default for AppConfig {
             game_path: None,
             auto_update: true,
             auto_start: false,
-            github_repo: "YOUR_USERNAME/priconevh-translation".to_string(),
+            github_repo: "TomiWixoss/priconevh".to_string(),
             check_update_on_startup: true,
             language: "vi".to_string(),
         }

@@ -183,7 +183,8 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  gap: 32px;
+  gap: 20px;
+  overflow: hidden;
 }
 
 /* Title Area */
@@ -231,10 +232,10 @@
 }
 
 .app-title {
-  font-size: 48px;
+  font-size: 38px;
   font-weight: 800;
   color: var(--text-primary);
-  margin: 0 0 8px 0;
+  margin: 0 0 4px 0;
   letter-spacing: 0.02em;
   text-shadow: 0 4px 30px var(--shadow-glow);
 }
@@ -247,7 +248,7 @@
 }
 
 .app-subtitle {
-  font-size: 16px;
+  font-size: 13px;
   color: var(--text-muted);
   margin: 0;
   letter-spacing: 0.2em;
@@ -263,16 +264,17 @@
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-xl);
-  padding: 28px;
+  padding: 20px;
   box-shadow: 
     0 8px 32px var(--shadow),
     0 0 60px rgba(255, 107, 157, 0.1);
   animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 }
 
 /* Path Section */
 .path-section {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .path-header {
@@ -301,7 +303,7 @@
 
 .path-value {
   flex: 1;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-secondary);
   font-family: 'SF Mono', 'Consolas', monospace;
   white-space: nowrap;
@@ -310,13 +312,13 @@
 }
 
 .path-btn {
-  padding: 10px 20px;
+  padding: 8px 18px;
   background: var(--bg-glass);
   backdrop-filter: blur(10px);
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-md);
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   transition: all var(--transition);
   flex-shrink: 0;
@@ -337,7 +339,7 @@
 
 /* Panel Divider */
 .panel-divider {
-  padding: 16px 0;
+  padding: 12px 0;
 }
 
 .divider-line {
@@ -351,6 +353,84 @@
 }
 
 /* Version Section */
+.version-section {
+  margin-bottom: 16px;
+}
+
+/* Current Translation Section */
+.current-translation-section {
+  margin-bottom: 12px;
+}
+
+.current-translation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.current-translation-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.uninstall-btn {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-md);
+  color: var(--danger);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.uninstall-btn:hover:not(:disabled) {
+  background: rgba(255, 107, 107, 0.2);
+  transform: translateY(-1px);
+}
+
+.uninstall-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.current-translation-info {
+  padding: 14px 16px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--success);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.current-version-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.current-version-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.current-install-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
 .version-section {
   margin-bottom: 24px;
 }
@@ -381,13 +461,13 @@
 
 .version-select {
   width: 100%;
-  padding: 16px 18px;
+  padding: 14px 16px;
   background: var(--bg-glass);
   backdrop-filter: blur(10px);
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-lg);
   color: var(--text-primary);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -498,8 +578,8 @@
 
 /* Progress */
 .progress-section {
-  margin-bottom: 24px;
-  padding: 20px;
+  margin-bottom: 16px;
+  padding: 14px;
   background: var(--bg-glass);
   backdrop-filter: blur(10px);
   border: 1px solid var(--border-glass);
@@ -543,18 +623,18 @@
 /* Main Button */
 .main-button {
   width: 100%;
-  height: 56px;
-  padding: 0 28px;
+  height: 48px;
+  padding: 0 24px;
   background: linear-gradient(135deg, var(--accent) 0%, #ff8fb3 100%);
   border: none;
   border-radius: var(--radius-lg);
   color: white;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   cursor: pointer;
   transition: all var(--transition);
   text-transform: uppercase;
@@ -588,6 +668,15 @@
   color: white;
   transform: translateY(-3px);
   box-shadow: 0 8px 30px var(--shadow-glow);
+}
+
+.main-button.reinstall {
+  background: linear-gradient(135deg, #7dd3c0 0%, #5fb8a8 100%);
+  box-shadow: 0 4px 20px rgba(125, 211, 192, 0.3);
+}
+
+.main-button.reinstall:hover:not(:disabled) {
+  box-shadow: 0 8px 30px rgba(125, 211, 192, 0.4), 0 0 40px rgba(125, 211, 192, 0.3);
 }
 
 .main-button .btn-icon {
@@ -640,4 +729,90 @@
   border-left: none;
   border-top: none;
   border-radius: 0 0 var(--radius-xl) 0;
+}
+
+/* Confirm Dialog */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-out;
+  backdrop-filter: blur(4px);
+}
+
+.confirm-dialog {
+  width: 90%;
+  max-width: 400px;
+  padding: 24px;
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.confirm-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+}
+
+.confirm-message {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+}
+
+.confirm-message code {
+  padding: 2px 6px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 4px;
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.confirm-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.confirm-cancel {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  color: var(--text-secondary);
+}
+
+.confirm-cancel:hover {
+  background: var(--bg-glass-hover);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.confirm-danger {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.confirm-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(255, 107, 107, 0.4);
 }

@@ -22,17 +22,45 @@ impl GameInfo {
     }
 
     pub fn validate(&mut self) -> bool {
-        // Kiểm tra các file quan trọng của game
+        // Kiểm tra các file quan trọng của game Princess Connect Re:Dive
         let required_files = vec![
             "PrincessConnectReDive.exe",
             "UnityPlayer.dll",
+            "GameAssembly.dll",
         ];
 
+        // Kiểm tra thư mục Data
+        let data_folder_exists = self.path.join("PrincessConnectReDive_Data").exists();
+
+        // Game hợp lệ nếu có tất cả file cần thiết VÀ thư mục Data
         self.is_valid = required_files.iter().all(|file| {
             self.path.join(file).exists()
-        });
+        }) && data_folder_exists;
 
         self.is_valid
+    }
+
+    /// Kiểm tra chi tiết các file game (dùng cho cảnh báo)
+    pub fn get_missing_files(&self) -> Vec<String> {
+        let required_files = vec![
+            "PrincessConnectReDive.exe",
+            "UnityPlayer.dll",
+            "GameAssembly.dll",
+        ];
+
+        let mut missing = Vec::new();
+
+        for file in required_files {
+            if !self.path.join(file).exists() {
+                missing.push(file.to_string());
+            }
+        }
+
+        if !self.path.join("PrincessConnectReDive_Data").exists() {
+            missing.push("PrincessConnectReDive_Data/".to_string());
+        }
+
+        missing
     }
 
     pub fn check_translation(&mut self) -> bool {

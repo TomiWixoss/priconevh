@@ -161,12 +161,13 @@ impl TranslationService {
 
     /// Backup bản việt hóa cũ (CHỈ backup files việt hóa, KHÔNG backup toàn bộ game)
     fn backup_old_translation(&self, game_path: &Path) -> Result<(), String> {
-        // Chỉ backup các thư mục/file liên quan đến việt hóa
+        // Chỉ backup các thư mục/file liên quan đến việt hóa BepInEx
         let translation_items = vec![
-            ("localization", true),  // (path, is_directory)
-            ("translations", true),
-            ("translation.dat", false),
-            ("strings.json", false),
+            ("BepInEx", true),  // (path, is_directory)
+            ("dotnet", true),
+            (".doorstop_version", false),
+            ("doorstop_config.ini", false),
+            ("dxgi.dll", false),
             ("translation_info.json", false),
         ];
 
@@ -199,8 +200,8 @@ impl TranslationService {
 
     /// Xóa bản việt hóa cũ
     fn remove_old_translation(&self, game_path: &Path) -> Result<(), String> {
-        let translation_dirs = vec!["localization", "translations"];
-        let translation_files = vec!["translation.dat", "strings.json"];
+        let translation_dirs = vec!["BepInEx", "dotnet"];
+        let translation_files = vec![".doorstop_version", "doorstop_config.ini", "dxgi.dll"];
 
         // Xóa thư mục
         for dir_name in translation_dirs {
@@ -224,16 +225,17 @@ impl TranslationService {
     /// Copy files việt hóa vào game
     fn copy_translation_files(&self, source: &Path, game_path: &Path) -> Result<(), String> {
         // Tìm thư mục chứa files việt hóa trong extracted folder
-        let translation_root = if source.join("localization").exists() {
+        // Cấu trúc: PriconneTL_YYYYMMDD-VH/BepInEx/...
+        let translation_root = if source.join("BepInEx").exists() {
             source.to_path_buf()
         } else {
-            // Tìm trong các thư mục con
+            // Tìm trong các thư mục con (có thể có thư mục wrapper)
             for entry in std::fs::read_dir(source)
                 .map_err(|e| format!("Failed to read extracted directory: {}", e))? 
             {
                 let entry = entry.map_err(|e| format!("Failed to read entry: {}", e))?;
                 let path = entry.path();
-                if path.is_dir() && path.join("localization").exists() {
+                if path.is_dir() && path.join("BepInEx").exists() {
                     return self.copy_translation_files(&path, game_path);
                 }
             }
@@ -265,8 +267,11 @@ impl TranslationService {
             version: version.to_string(),
             installed_date: chrono::Utc::now().to_rfc3339(),
             files: vec![
-                "localization".to_string(),
-                "translations".to_string(),
+                "BepInEx".to_string(),
+                "dotnet".to_string(),
+                ".doorstop_version".to_string(),
+                "doorstop_config.ini".to_string(),
+                "dxgi.dll".to_string(),
             ],
         };
 

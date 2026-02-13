@@ -15,10 +15,11 @@ interface MainScreenProps {
 
 export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: MainScreenProps) {
   const { gamePath, gameInfo, isLoading: isGameLoading, autoDetectGame, selectGameDirectory } = gamePathHook;
-  const { pack, currentInfo, isLoading: _isTranslationLoading, isInstalling, progress, loadPack, install, update, loadCurrentInfo } = translationHook;
+  const { pack, currentInfo, isLoading: _isTranslationLoading, isInstalling, progress, loadPack, install, update, uninstall, loadCurrentInfo } = translationHook;
 
   const [showVersions, setShowVersions] = useState(false);
   const [selectedVersion, setSelectedVersion] = useState<TranslationVersion | null>(null);
+  const [showUninstallConfirm, setShowUninstallConfirm] = useState(false);
 
   const hasGame = gamePath && gameInfo?.is_valid;
   const hasTranslation = gameInfo?.has_translation;
@@ -76,10 +77,17 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
     }
   };
 
+  const handleUninstall = async () => {
+    if (!gamePath) return;
+    
+    setShowUninstallConfirm(false);
+    await uninstall(gamePath);
+  };
+
   const getMainButtonText = () => {
     if (isInstalling) return "Đang cài đặt...";
     if (!hasGame) return "Chọn thư mục game";
-    if (hasTranslation && currentInfo?.version === selectedVersion?.version) return "Đã cài đặt";
+    if (hasTranslation && currentInfo?.version === selectedVersion?.version) return "Cài lại";
     if (hasTranslation && currentInfo?.version !== selectedVersion?.version) return "Cập nhật";
     return "Cài đặt";
   };
@@ -87,7 +95,8 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
   const getMainButtonIcon = () => {
     if (isInstalling) return <Loader2 size={20} className="btn-icon spinning" />;
     if (!hasGame) return <FolderOpen size={20} />;
-    if (hasTranslation && currentInfo?.version === selectedVersion?.version) return <Play size={20} />;
+    if (hasTranslation && currentInfo?.version === selectedVersion?.version) return <Download size={20} />;
+    if (hasTranslation && currentInfo?.version !== selectedVersion?.version) return <Download size={20} />;
     return <Download size={20} />;
   };
 
@@ -144,7 +153,7 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
             <Star className="star-icon star-3" size={20} />
           </div>
           <h1 className="app-title">
-            <span className="title-highlight">Princess</span> Connect!
+            <span className="title-highlight">Princess Connect!</span> Re:Dive
           </h1>
           <p className="app-subtitle">Trình cài đặt việt hóa</p>
         </div>
@@ -176,11 +185,43 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
             <div className="divider-line" />
           </div>
 
+          {/* Current Translation Info */}
+          {hasGame && hasTranslation && currentInfo && (
+            <div className="current-translation-section">
+              <div className="current-translation-header">
+                <span className="current-translation-label">Phiên bản hiện tại</span>
+                <button 
+                  onClick={() => setShowUninstallConfirm(true)}
+                  className="uninstall-btn"
+                  disabled={isInstalling}
+                  title="Gỡ bản việt hóa"
+                >
+                  Gỡ bỏ
+                </button>
+              </div>
+              <div className="current-translation-info">
+                <div className="current-version-badge">
+                  <span className="current-version-text">{currentInfo.version}</span>
+                </div>
+                <span className="current-install-date">
+                  Cài đặt: {new Date(currentInfo.installed_date).toLocaleDateString('vi-VN')}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Divider */}
+          {hasGame && hasTranslation && currentInfo && pack && pack.versions.length > 0 && (
+            <div className="panel-divider">
+              <div className="divider-line" />
+            </div>
+          )}
+
           {/* Version Selector */}
           {hasGame && pack && pack.versions.length > 0 && (
             <div className="version-section">
               <div className="version-header">
-                <span className="version-label">Phiên bản dịch</span>
+                <span className="version-label">Chọn phiên bản</span>
                 <span className="version-latest">
                   Mới nhất: {pack.latest_version}
                 </span>
@@ -249,7 +290,7 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
           <button
             onClick={handleMainAction}
             disabled={!!(isInstalling || isGameLoading || (hasGame && !selectedVersion))}
-            className={`main-button ${!hasGame ? 'select-path' : ''}`}
+            className={`main-button ${!hasGame ? 'select-path' : ''} ${hasTranslation && currentInfo?.version === selectedVersion?.version ? 'reinstall' : ''}`}
           >
             {getMainButtonIcon()}
             <span>{getMainButtonText()}</span>
@@ -262,6 +303,34 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
       <div className="corner-decoration corner-tr" />
       <div className="corner-decoration corner-bl" />
       <div className="corner-decoration corner-br" />
+
+      {/* Uninstall Confirmation Dialog */}
+      {showUninstallConfirm && (
+        <div className="confirm-overlay" onClick={() => setShowUninstallConfirm(false)}>
+          <div className="confirm-dialog glass-panel" onClick={(e) => e.stopPropagation()}>
+            <h3 className="confirm-title">Xác nhận gỡ bỏ</h3>
+            <p className="confirm-message">
+              Bạn có chắc muốn gỡ bỏ bản việt hóa? 
+              <br />
+              Dữ liệu cũ sẽ được backup vào thư mục <code>translation_backup</code>.
+            </p>
+            <div className="confirm-actions">
+              <button 
+                onClick={() => setShowUninstallConfirm(false)} 
+                className="confirm-btn confirm-cancel"
+              >
+                Hủy
+              </button>
+              <button 
+                onClick={handleUninstall} 
+                className="confirm-btn confirm-danger"
+              >
+                Gỡ bỏ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

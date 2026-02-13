@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Loader2, X, ChevronDown, Settings as SettingsIcon } from "lucide-react";
+import { Loader2, X, Settings as SettingsIcon } from "lucide-react";
 import { configApi } from "../../lib/api";
 import type { AppConfig } from "../../types";
 import "./Settings.css";

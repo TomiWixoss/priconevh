@@ -78,7 +78,7 @@ impl GitHubService {
             .filter_map(|release| {
                 // Tìm asset zip file
                 let asset = release.assets.iter().find(|a| {
-                    a.name.ends_with(".zip") || a.name.contains("translation")
+                    a.name.ends_with(".zip") && a.name.contains("PriconneTL")
                 })?;
 
                 // Parse changelog từ body
@@ -107,7 +107,7 @@ impl GitHubService {
         
         if latest.tag_name != current_version {
             let asset = latest.assets.iter().find(|a| {
-                a.name.ends_with(".zip") || a.name.contains("translation")
+                a.name.ends_with(".zip") && a.name.contains("PriconneTL")
             }).ok_or_else(|| "No translation asset found".to_string())?;
 
             let changelog: Vec<String> = latest.body
