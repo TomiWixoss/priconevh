@@ -1,50 +1,106 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import { useState, useEffect } from "react";
+import { listen } from "@tauri-apps/api/event";
+import { Home } from "lucide-react";
+import { Settings } from "lucide-react";
+import { Download } from "lucide-react";
+import { Gamepad2 } from "lucide-react";
+import { Crown } from "lucide-react";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { Dashboard } from "@/components/pages/Dashboard";
+import { GamePath } from "@/components/pages/GamePath";
+import { Translation } from "@/components/pages/Translation";
+import { SettingsPage } from "@/components/pages/Settings";
+import { UpdateNotification } from "@/components/ui/UpdateNotification";
+import { useGamePath } from "@/hooks/useGamePath";
+import { useTranslation } from "@/hooks/useTranslation";
+import { useAppUpdate } from "@/hooks/useAppUpdate";
+import type { AppUpdateInfo } from "@/types";
+
+type Page = "dashboard" | "game-path" | "translation" | "settings";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const [currentPage, setCurrentPage] = useState<Page>("dashboard");
+  const [updateInfo, setUpdateInfo] = useState<AppUpdateInfo | null>(null);
+  
+  const gamePathHook = useGamePath();
+  const translationHook = useTranslation();
+  const appUpdateHook = useAppUpdate();
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
+  // Check for app updates on mount
+  useEffect(() => {
+    appUpdateHook.checkForUpdates().then(setUpdateInfo);
+  }, []);
+
+  // Listen for translation progress events
+  useEffect(() => {
+    const unlisten = listen<[string, number]>("translation-progress", (event) => {
+      const [message, progress] = event.payload;
+      translationHook.setProgress({ message, progress });
+    });
+    return () => {
+      unlisten.then((fn) => fn());
+    };
+  }, []);
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case "dashboard":
+        return (
+          <Dashboard
+            gamePathHook={gamePathHook}
+            translationHook={translationHook}
+            onNavigate={(page) => setCurrentPage(page as Page)}
+          />
+        );
+      case "game-path":
+        return <GamePath hook={gamePathHook} />;
+      case "translation":
+        return <Translation hook={translationHook} gamePath={gamePathHook.gamePath} />;
+      case "settings":
+        return <SettingsPage />;
+      default:
+        return null;
+    }
+  };
+
+  const navItems = [
+    { id: "dashboard" as Page, label: "Tổng quan", icon: Home },
+    { id: "game-path" as Page, label: "Thư mục game", icon: Gamepad2 },
+    { id: "translation" as Page, label: "Việt hóa", icon: Download },
+    { id: "settings" as Page, label: "Cài đặt", icon: Settings },
+  ];
 
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+    <div className="app-layout">
+      <Sidebar
+        items={navItems}
+        currentPage={currentPage}
+        onNavigate={setCurrentPage}
+      />
+      
+      <main className="main-content">
+        <header className="app-header">
+          <div className="header-left">
+            <Crown className="header-icon" />
+            <h1 className="app-title">Priconne VN Installer</h1>
+          </div>
+          <div className="header-right">
+            {updateInfo && (
+              <UpdateNotification
+                info={updateInfo}
+                onUpdate={appUpdateHook.downloadAndInstall}
+                isDownloading={appUpdateHook.isDownloading}
+                progress={appUpdateHook.progress}
+              />
+            )}
+          </div>
+        </header>
+        
+        <div className="page-content">
+          {renderPage()}
+        </div>
+      </main>
+    </div>
   );
 }
 
