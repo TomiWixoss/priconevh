@@ -33,11 +33,10 @@ impl UpdaterService {
         
         // So sánh version
         if self.is_newer_version(&latest.tag_name) {
-            // Tìm file .msi hoặc .exe trong assets
-            let asset = latest.assets.iter().find(|a| {
-                let name = a.name.to_lowercase();
-                name.ends_with(".msi") || name.ends_with(".exe")
-            }).ok_or_else(|| "No installer found in release".to_string())?;
+            // Chỉ tìm file .msi
+            let asset = latest.assets.iter()
+                .find(|a| a.name.to_lowercase().ends_with(".msi"))
+                .ok_or_else(|| "No MSI installer found in release".to_string())?;
 
             let changelog: Vec<String> = latest.body
                 .lines()

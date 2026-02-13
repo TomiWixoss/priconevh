@@ -32,26 +32,18 @@ pub async fn download_and_install_update(
         },
     ).await?;
 
-    // Chạy installer
+    // Chạy MSI installer
     #[cfg(target_os = "windows")]
     {
         use std::process::Command;
         
         let installer_str = installer_path.to_string_lossy().to_string();
         
-        // Chạy installer với quyền admin
-        if installer_str.ends_with(".msi") {
-            // MSI installer
-            Command::new("msiexec")
-                .args(&["/i", &installer_str])
-                .spawn()
-                .map_err(|e| format!("Failed to run installer: {}", e))?;
-        } else {
-            // EXE installer
-            Command::new(&installer_str)
-                .spawn()
-                .map_err(|e| format!("Failed to run installer: {}", e))?;
-        }
+        // Chạy MSI installer với quyền admin
+        Command::new("msiexec")
+            .args(&["/i", &installer_str])
+            .spawn()
+            .map_err(|e| format!("Failed to run installer: {}", e))?;
         
         // Đóng app hiện tại để installer có thể cập nhật
         std::process::exit(0);
