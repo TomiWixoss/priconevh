@@ -14,6 +14,7 @@ export interface TranslationVersion {
   download_url: string;
   file_size: number;
   changelog: string[];
+  download_count: number;
 }
 
 export interface TranslationPack {

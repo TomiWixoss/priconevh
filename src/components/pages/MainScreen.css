@@ -534,8 +534,8 @@
   cursor: pointer;
   transition: all var(--transition);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 4px;
 }
 
@@ -549,6 +549,13 @@
 }
 
 .version-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.version-name-row {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -570,10 +577,21 @@
   letter-spacing: 0.05em;
 }
 
+.version-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+}
+
 .version-size {
-  font-size: 12px;
   color: var(--text-muted);
   font-weight: 500;
+}
+
+.version-downloads {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 /* Progress */
@@ -729,6 +747,43 @@
   border-left: none;
   border-top: none;
   border-radius: 0 0 var(--radius-xl) 0;
+}
+
+/* Social Links */
+.social-links {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.social-btn {
+  width: 44px;
+  height: 44px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.social-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px var(--shadow-glow);
+}
+
+.social-btn:active {
+  transform: translateY(-1px);
 }
 
 /* Confirm Dialog */

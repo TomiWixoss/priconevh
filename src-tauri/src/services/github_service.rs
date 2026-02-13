@@ -94,6 +94,7 @@ impl GitHubService {
                     download_url: asset.browser_download_url.clone(),
                     file_size: asset.size,
                     changelog,
+                    download_count: asset.download_count,
                 })
             })
             .collect();
@@ -122,6 +123,7 @@ impl GitHubService {
                 download_url: asset.browser_download_url.clone(),
                 file_size: asset.size,
                 changelog,
+                download_count: asset.download_count,
             }))
         } else {
             Ok(None)

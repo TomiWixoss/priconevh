@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Download, Play, FolderOpen, Settings, ChevronDown, Loader2, Star } from "lucide-react";
+import { Download, Play, FolderOpen, Settings, ChevronDown, Loader2, Star, Github, Facebook, MessageCircle } from "lucide-react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { open } from "@tauri-apps/plugin-shell";
 import { useGamePath } from "../../hooks/useGamePath";
 import { useTranslation } from "../../hooks/useTranslation";
 import { formatBytes } from "../../lib/api";
@@ -82,6 +83,14 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
     
     setShowUninstallConfirm(false);
     await uninstall(gamePath);
+  };
+
+  const openLink = async (url: string) => {
+    try {
+      await open(url);
+    } catch (error) {
+      console.error('Failed to open link:', error);
+    }
   };
 
   const getMainButtonText = () => {
@@ -260,10 +269,15 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
                           className={`version-option ${isSelected ? 'selected' : ''}`}
                         >
                           <div className="version-info">
-                            <span className="version-name">{version.version}</span>
-                            {isCurrent && <span className="version-badge">Đã cài</span>}
+                            <div className="version-name-row">
+                              <span className="version-name">{version.version}</span>
+                              {isCurrent && <span className="version-badge">Đã cài</span>}
+                            </div>
+                            <div className="version-stats">
+                              <span className="version-size">{formatBytes(version.file_size)}</span>
+                              <span className="version-downloads">↓ {version.download_count.toLocaleString()} lượt</span>
+                            </div>
                           </div>
-                          <span className="version-size">{formatBytes(version.file_size)}</span>
                         </button>
                       );
                     })}
@@ -303,6 +317,31 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
       <div className="corner-decoration corner-tr" />
       <div className="corner-decoration corner-bl" />
       <div className="corner-decoration corner-br" />
+
+      {/* Social Links */}
+      <div className="social-links">
+        <button 
+          onClick={() => openLink('https://github.com/TomiWixoss')}
+          className="social-btn"
+          title="GitHub"
+        >
+          <Github size={20} />
+        </button>
+        <button 
+          onClick={() => openLink('https://www.facebook.com/profile.php?id=61588049007707')}
+          className="social-btn"
+          title="Facebook"
+        >
+          <Facebook size={20} />
+        </button>
+        <button 
+          onClick={() => openLink('https://zalo.me/0762605309')}
+          className="social-btn"
+          title="Zalo"
+        >
+          <MessageCircle size={20} />
+        </button>
+      </div>
 
       {/* Uninstall Confirmation Dialog */}
       {showUninstallConfirm && (

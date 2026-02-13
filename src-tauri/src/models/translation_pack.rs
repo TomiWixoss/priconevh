@@ -7,6 +7,7 @@ pub struct TranslationVersion {
     pub download_url: String,
     pub file_size: u64,
     pub changelog: Vec<String>,
+    pub download_count: u64,  // Số lượt tải
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -48,4 +49,5 @@ pub struct GitHubAsset {
     pub name: String,
     pub size: u64,
     pub browser_download_url: String,
+    pub download_count: u64,  // Số lượt tải
 }
