@@ -127,23 +127,6 @@ export function SettingsDialog({ onClose }: SettingsDialogProps) {
               </div>
 
               {/* Section 3 */}
-              <div className="settings-section">
-                <h3 className="section-title">Hành vi</h3>
-                <div className="section-content">
-                  <div className="radio-group">
-                    <label className="radio-item">
-                      <input type="radio" name="close-behavior" value="minimize" defaultChecked />
-                      <span className="radio-custom" />
-                      <span className="radio-label">Thu nhỏ về khay</span>
-                    </label>
-                    <label className="radio-item">
-                      <input type="radio" name="close-behavior" value="close" />
-                      <span className="radio-custom" />
-                      <span className="radio-label">Thoát hoàn toàn</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
             </div>
           )}
         </div>

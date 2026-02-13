@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Download, Play, FolderOpen, Settings, ChevronDown, Loader2, Star, Github, Facebook, MessageCircle } from "lucide-react";
+import { Download, FolderOpen, Settings, ChevronDown, Loader2, Star, Github, Facebook, MessageCircle } from "lucide-react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { open } from "@tauri-apps/plugin-shell";
 import { useGamePath } from "../../hooks/useGamePath";
@@ -15,7 +15,7 @@ interface MainScreenProps {
 }
 
 export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: MainScreenProps) {
-  const { gamePath, gameInfo, isLoading: isGameLoading, autoDetectGame, selectGameDirectory } = gamePathHook;
+  const { gamePath, gameInfo, isLoading: isGameLoading, error: gameError, autoDetectGame, selectGameDirectory } = gamePathHook;
   const { pack, currentInfo, isLoading: _isTranslationLoading, isInstalling, progress, loadPack, install, update, uninstall, loadCurrentInfo } = translationHook;
 
   const [showVersions, setShowVersions] = useState(false);
@@ -88,7 +88,11 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
   };
 
   const getMainButtonText = () => {
-    if (isInstalling) return "Đang cài đặt...";
+    if (isInstalling) {
+      // Check progress message để phân biệt đang cài hay đang gỡ
+      if (progress.message.includes("gỡ")) return "Đang gỡ bỏ...";
+      return "Đang cài đặt...";
+    }
     if (isGameLoading) return "Đang tìm game...";
     if (!hasGame) return "Chọn thư mục game";
     if (hasTranslation && currentInfo?.version === selectedVersion?.version) return "Cài lại";
@@ -172,7 +176,11 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
             </div>
             <div className="path-content">
               <p className="path-value">
-                {isGameLoading ? "Đang tìm kiếm thư mục game..." : hasGame ? gamePath : "Chưa chọn thư mục game"}
+                {isGameLoading 
+                  ? "Đang tìm kiếm thư mục game..." 
+                  : hasGame 
+                    ? gamePath 
+                    : gameError || "Vui lòng chọn thư mục game"}
               </p>
               <button 
                 onClick={selectGameDirectory}
@@ -264,14 +272,12 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
                           className={`version-option ${isSelected ? 'selected' : ''}`}
                         >
                           <div className="version-info">
-                            <div className="version-name-row">
-                              <span className="version-name">{version.version}</span>
-                              {isCurrent && <span className="version-badge">Đã cài</span>}
-                            </div>
-                            <div className="version-stats">
-                              <span className="version-size">{formatBytes(version.file_size)}</span>
-                              <span className="version-downloads">↓ {version.download_count.toLocaleString()} lượt</span>
-                            </div>
+                            <span className="version-name">{version.version}</span>
+                            {isCurrent && <span className="version-badge">Đã cài</span>}
+                            <span className="version-size">{formatBytes(version.file_size)}</span>
+                            <span className="version-downloads">
+                              <Download size={14} /> {version.download_count.toLocaleString()}
+                            </span>
                           </div>
                         </button>
                       );

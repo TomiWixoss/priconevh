@@ -1,77 +1,22 @@
 use crate::models::GameInfo;
 use std::path::PathBuf;
-use std::fs;
 
 pub struct GameService;
 
 impl GameService {
-    /// Tự động tìm thư mục game trong thư mục user hiện tại
+    /// Tự động tìm thư mục game - chỉ check path mặc định của DMM
     pub fn auto_detect_game_path() -> Option<PathBuf> {
-        // Chỉ quét thư mục user hiện tại (C:\Users\<username>)
+        // Lấy thư mục user hiện tại
         if let Some(user_dir) = dirs::home_dir() {
-            let all_candidates = Self::find_all_priconner_folders_in_dir(&user_dir);
+            // DMM mặc định cài trong C:\Users\<username>\priconner
+            let game_path = user_dir.join("priconner");
             
-            for candidate in all_candidates {
-                if Self::validate_game_path(candidate.clone()).is_ok() {
-                    return Some(candidate);
-                }
+            if game_path.exists() && Self::validate_game_path(game_path.clone()).is_ok() {
+                return Some(game_path);
             }
         }
 
         None
-    }
-
-    /// Tìm TẤT CẢ các thư mục có tên "priconner" trong một thư mục cụ thể
-    fn find_all_priconner_folders_in_dir(base_dir: &PathBuf) -> Vec<PathBuf> {
-        let mut candidates = Vec::new();
-        Self::collect_priconner_folders(base_dir, &mut candidates);
-        candidates
-    }
-
-    /// Thu thập TẤT CẢ các thư mục "priconner" (không validate ngay)
-    fn collect_priconner_folders(base_path: &PathBuf, candidates: &mut Vec<PathBuf>) {
-        // Đọc các thư mục con
-        let entries = match fs::read_dir(base_path) {
-            Ok(entries) => entries,
-            Err(_) => return,
-        };
-
-        for entry in entries.flatten() {
-            let path = entry.path();
-            
-            // Bỏ qua files, chỉ xét thư mục
-            if !path.is_dir() {
-                continue;
-            }
-
-            // Bỏ qua các thư mục hệ thống và không cần thiết
-            if let Some(name) = path.file_name() {
-                let name_str = name.to_string_lossy().to_lowercase();
-                
-                // Chỉ loại trừ những thư mục chắc chắn 100% không có game
-                if name_str.starts_with('$')  // $Recycle.Bin, $WinREAgent, etc.
-                    || name_str == "appdata"
-                    || name_str == "application data"
-                    || name_str == "local settings"
-                    || name_str == "ntuser"
-                    || name_str == "temp"
-                    || name_str == "tmp"
-                    || name_str == "node_modules"
-                    || name_str == ".git"
-                    || name_str == ".vscode" {
-                    continue;
-                }
-
-                // Tìm thấy thư mục "priconner" → Thêm vào danh sách
-                if name_str == "priconner" {
-                    candidates.push(path.clone());
-                    continue;  // Không cần scan sâu hơn trong thư mục game
-                }
-            }
-
-            // Tìm kiếm đệ quy trong thư mục con (không giới hạn depth)
-            Self::collect_priconner_folders(&path, candidates);
-        }
     }
 
     /// Validate game directory và trả về thông tin chi tiết
