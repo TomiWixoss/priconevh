@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Download, FolderOpen, Settings, ChevronDown, Loader2, Star, Github, Facebook, MessageCircle } from "lucide-react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { getVersion } from "@tauri-apps/api/app";
 import { open } from "@tauri-apps/plugin-shell";
 import { useGamePath } from "../../hooks/useGamePath";
 import { useTranslation } from "../../hooks/useTranslation";
@@ -21,9 +22,14 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
   const [showVersions, setShowVersions] = useState(false);
   const [selectedVersion, setSelectedVersion] = useState<TranslationVersion | null>(null);
   const [showUninstallConfirm, setShowUninstallConfirm] = useState(false);
+  const [appVersion, setAppVersion] = useState<string>("");
 
   const hasGame = gamePath && gameInfo?.is_valid;
   const hasTranslation = gameInfo?.has_translation;
+
+  useEffect(() => {
+    getVersion().then(setAppVersion);
+  }, []);
 
   useEffect(() => {
     if (hasGame) {
@@ -318,6 +324,11 @@ export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: Ma
       <div className="corner-decoration corner-tr" />
       <div className="corner-decoration corner-bl" />
       <div className="corner-decoration corner-br" />
+
+      {/* Version Info */}
+      <div className="app-version">
+        v{appVersion}
+      </div>
 
       {/* Social Links */}
       <div className="social-links">
