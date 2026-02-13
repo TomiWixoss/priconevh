@@ -29,22 +29,8 @@ export function useAppUpdate() {
     setError(null);
 
     try {
-      // Listen for progress events
-      const progressUnsub = updaterApi.onProgress((p) => {
-        setProgress(p);
-      });
-
-      // Listen for completion
-      const completedUnsub = updaterApi.onCompleted(() => {
-        setProgress(100);
-      });
-
-      // Start download
-      await updaterApi.downloadAndInstall();
-
-      // Cleanup listeners
-      progressUnsub.then((unsub) => unsub());
-      completedUnsub.then((unsub) => unsub());
+      await updaterApi.downloadAndInstall(updateInfo);
+      setProgress(100);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Tải cập nhật thất bại");
       setIsDownloading(false);

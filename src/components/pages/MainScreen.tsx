@@ -15,7 +15,7 @@ interface MainScreenProps {
 }
 
 export function MainScreen({ gamePathHook, translationHook, onOpenSettings }: MainScreenProps) {
-  const { gamePath, gameInfo, isLoading: isGameLoading, error: gameError, autoDetectGame, selectGameDirectory } = gamePathHook;
+  const { gamePath, gameInfo, isLoading: isGameLoading, error: gameError, selectGameDirectory } = gamePathHook;
   const { pack, currentInfo, isLoading: _isTranslationLoading, isInstalling, progress, loadPack, install, update, uninstall, loadCurrentInfo } = translationHook;
 
   const [showVersions, setShowVersions] = useState(false);
